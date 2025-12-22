@@ -1,0 +1,22 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  justify-content: center;
+  min-height: 100%;
+  max-width: 500px;
+  padding: 0 3rem;
+  .icon {
+    mat-icon {
+      font-size: 5rem;
+      height: 5rem;
+      width: 5rem;
+    }
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+}

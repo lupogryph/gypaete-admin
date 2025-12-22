@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi-generator.tech/config.schema.json",
+  "generatorName": "typescript-angular",
+  "inputSpec": "http://localhost:3000/api-yaml",
+  "outputDir": "src/app/openapi",
+  "additionalProperties": {
+    "ngVersion": "17",
+    "providedInRoot": true,
+    "stringEnums": true,
+    "withInterfaces": true
+  }
+}

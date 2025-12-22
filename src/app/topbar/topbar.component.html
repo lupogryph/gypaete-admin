@@ -1,0 +1,21 @@
+@if (user()) {
+<mat-toolbar>
+  <button [routerLink]="['/dashboard']" mat-icon-button><mat-icon>calendar_month</mat-icon></button>
+  <span>Gypaete | admin</span>
+  <span class="spacer"></span>
+  <span>{{user()?.firstName}} {{user()?.name}}</span>
+  <button mat-icon-button class="" aria-label="" [matMenuTriggerFor]="userMenu">
+    <mat-icon>person</mat-icon>
+  </button>
+  <mat-menu #userMenu="matMenu">
+    <button [routerLink]="['/profile']" mat-menu-item>
+      <mat-icon>account_circle</mat-icon>
+      <span>Profil</span>
+    </button>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Déconnection</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+}
