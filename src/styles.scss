@@ -37,6 +37,52 @@ body {
 }
 /* You can add global styles to this file, and also import other style files */
 
+section {
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+  &:first-child {
+    padding-top: 1rem;
+  }
+  &.row {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  &.lg, &.md, &.sm {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  &.left {
+    margin-left: 0;
+  }
+  &.right {
+    margin-right: 0;
+  }
+  &.lg {
+    max-width: 1920px;
+  }
+  &.md {
+    max-width: 1300px;
+  }
+  &.sm {
+    max-width: 720px;
+  }
+}
+
+.status-icon {
+  margin-right: 5px;
+  &.dbx {
+    color: deepskyblue;
+  }
+  &.ope {
+    color: orange;
+  }
+  &.admin {
+    color: red;
+  }
+}
+
 .big-icon {
   mat-icon {
     font-size: 5rem;

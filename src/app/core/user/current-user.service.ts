@@ -1,6 +1,6 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { UserDto, UserService } from './openapi';
-import { userSignal } from '../main';
+import { UserDto, UserService } from '../../openapi';
+import { userSignal } from '../../../main';
 
 
 @Injectable({
@@ -8,18 +8,16 @@ import { userSignal } from '../main';
 })
 export class CurrentUserService {
 
-  user = userSignal;
-
   constructor(private userService: UserService) {}
 
   setUser() {
     this.userService.userControllerFind().subscribe({
-      next: (user) => this.user.set(user)
+      next: (user) => userSignal.set(user)
     })
   }
 
   removeUser() {
-    this.user.set(undefined);
+    userSignal.set(undefined);
   }
 
 }

@@ -4,11 +4,11 @@ import { provideHttpClient } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { environment } from '../environments/environment';
-import { AuthApiService } from './auth.api.service';
 import { Configuration } from './openapi/configuration';
 
 import localeFr from '@angular/common/locales/fr';
 import { registerLocaleData } from '@angular/common';
+import {JwtService} from './core/auth/jwt.service';
 registerLocaleData(localeFr);
 
 export const appConfig: ApplicationConfig = {
@@ -18,12 +18,12 @@ export const appConfig: ApplicationConfig = {
     { provide: LOCALE_ID, useValue: 'fr-FR' },
     {
       provide: Configuration,
-      useFactory: (authService: AuthApiService) =>
+      useFactory: (jwt: JwtService) =>
         new Configuration({
           basePath: environment.apiUrl,
-          credentials: { bearer: authService.getAccessToken.bind(authService) },
+          credentials: { bearer: jwt.getToken.bind(jwt) }
         }),
-      deps: [AuthApiService],
+      deps: [JwtService],
       multi: false,
     },
   ],

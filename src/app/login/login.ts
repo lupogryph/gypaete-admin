@@ -1,21 +1,16 @@
 import {Component, signal} from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { AuthService, Configuration, UserService } from '../openapi';
-import { AuthApiService } from '../auth.api.service';
-import { CurrentUserService } from '../current-user.service';
-import { userSignal } from '../../main';
-import {email, Field, form, required, schema, submit} from '@angular/forms/signals';
+import {ReactiveFormsModule,} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
+import {AuthService} from '../openapi';
+import {CurrentUserService} from '../core/user/current-user.service';
+import {userSignal} from '../../main';
+import {email, Field, form, required} from '@angular/forms/signals';
+import {JwtService} from '../core/auth/jwt.service';
 
 @Component({
   selector: 'app-login',
@@ -29,12 +24,10 @@ import {email, Field, form, required, schema, submit} from '@angular/forms/signa
     MatIconModule,
     MatSnackBarModule,
   ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  templateUrl: './login.html',
+  styleUrl: './login.scss',
 })
-export class LoginComponent {
-  userSignal = userSignal;
-
+export class Login {
   loginModel = signal({
     email: '',
     password: '',
@@ -50,7 +43,7 @@ export class LoginComponent {
     private _snackBar: MatSnackBar,
     private router: Router,
     private authService: AuthService,
-    private authApiService: AuthApiService,
+    private jwtService: JwtService,
     private currentUserService: CurrentUserService,
   ) {}
 
@@ -60,7 +53,7 @@ export class LoginComponent {
       const login = this.loginModel();
       this.authService.authControllerLogin(login.email, login.password).subscribe({
         next: (token) => {
-          this.authApiService.setAccessToken(token.access_token);
+          this.jwtService.setToken(token.access_token);
           this.currentUserService.setUser();
           this.router.navigate(['']);
         },
