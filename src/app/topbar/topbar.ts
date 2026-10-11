@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -14,6 +14,7 @@ import {JwtService} from '../core/auth/jwt.service';
   standalone: true,
   imports: [MatToolbarModule, MatIconModule, MatButtonModule, MatMenuModule, CommonModule, RouterModule],
   templateUrl: './topbar.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './topbar.scss',
 })
 export class Topbar {

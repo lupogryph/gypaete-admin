@@ -4,7 +4,7 @@
   "inputSpec": "http://localhost:3000/api-yaml",
   "outputDir": "src/app/openapi",
   "additionalProperties": {
-    "ngVersion": "17",
+    "ngVersion": "22",
     "providedInRoot": true,
     "stringEnums": true,
     "withInterfaces": true

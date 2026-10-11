@@ -1,5 +1,5 @@
-import { Injectable, signal, WritableSignal } from '@angular/core';
-import { UserDto, UserService } from '../../openapi';
+import { Injectable } from '@angular/core';
+import { UserService } from '../../openapi';
 import { userSignal } from '../../../main';
 
 

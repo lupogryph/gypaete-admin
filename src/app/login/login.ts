@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, signal, ChangeDetectionStrategy} from '@angular/core';
 import {ReactiveFormsModule,} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -8,15 +8,14 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {AuthService} from '../openapi';
 import {CurrentUserService} from '../core/user/current-user.service';
-import {userSignal} from '../../main';
-import {email, Field, form, required} from '@angular/forms/signals';
+import {email, FormField, form, required} from '@angular/forms/signals';
 import {JwtService} from '../core/auth/jwt.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    Field,
+    FormField,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -25,6 +24,7 @@ import {JwtService} from '../core/auth/jwt.service';
     MatSnackBarModule,
   ],
   templateUrl: './login.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './login.scss',
 })
 export class Login {
