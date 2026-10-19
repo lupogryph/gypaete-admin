@@ -25,6 +25,9 @@
   },
   "private": true,
   "packageManager": "npm@10.9.3",
+  "overrides": {
+    "basic-ftp": "^6.2.3"
+  },
   "dependencies": {
     "@angular/cdk": "^21.0.5",
     "@angular/common": "^22.2.2",
@@ -43,7 +46,7 @@
     "@angular/build": "^22.2.2",
     "@angular/cli": "^22.2.2",
     "@angular/compiler-cli": "^22.2.2",
-    "@openapitools/openapi-generator-cli": "^2.25.2",
+    "@openapitools/openapi-generator-cli": "^2.41.0",
     "jsdom": "^27.1.0",
     "typescript": "~6.0.3",
     "vitest": "^4.0.8"

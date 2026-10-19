@@ -1,123 +1,45 @@
-import {Component, effect, input, signal, ChangeDetectionStrategy} from '@angular/core';
-import {Role, UpdateUserDto, UserDto, UserService} from '../../openapi';
-import {email, FormField, form, required, validate} from '@angular/forms/signals';
-import {ReactiveFormsModule} from '@angular/forms';
-import {MatCard, MatCardActions, MatCardContent} from '@angular/material/card';
-import {MatFormField, MatInput, MatLabel, MatPrefix} from '@angular/material/input';
-import {MatIcon} from '@angular/material/icon';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {MatButton} from '@angular/material/button';
-import {userSignal} from '../../../main';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {FilterEmptyPipe} from '../../shared/pipes/filter-empty.pipe';
+import {userSignal} from '../../../main';
+import {UpdateUserDto, UserService} from '../../openapi';
+import {UserForm} from '../user-form/user-form';
 
 @Component({
   selector: 'app-user-profile',
-  imports: [
-    FormField,
-    ReactiveFormsModule,
-    MatCard,
-    MatCardContent,
-    MatFormField,
-    MatIcon,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatInput,
-    MatCardActions,
-    MatButton,
-    MatPrefix
-  ],
-  providers: [FilterEmptyPipe],
+  imports: [UserForm],
   templateUrl: './user-profile.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './user-profile.scss',
 })
 export class UserProfile {
-  profile = input<UserDto>();
-
-  userModel = signal({
-    email: '',
-    firstName: '',
-    name: '',
-    role: Role.User
-  });
-
-  passwordModel = signal({
-    password: '',
-    repassword: '',
-  })
-
-  userForm = form(this.userModel, (sp) => {
-    required(sp.email, {message: 'Email requis'});
-    email(sp.email, {message: 'Doit être une adresse mail valide'});
-  });
-
-  passwordForm = form(this.passwordModel, (sp) => {
-    required(sp.password, {message: 'Mot de passe requis'});
-    required(sp.repassword, {message: 'Merci de confirmer le mot de passe'});
-    validate(sp.repassword, ({value, valueOf}) => {
-      const repassword = value();
-      const password = valueOf(sp.password)
-      if (repassword !== password) {
-        return {
-          kind: 'passwordMismatch',
-          message: 'Les mots de passe ne correspondent pas'
-        }
-      }
-      return null;
-    })
-  })
+  readonly user = userSignal;
 
   constructor(
-    private _snackBar: MatSnackBar,
-    private userService: UserService,
-    private filterEmptyPipe: FilterEmptyPipe,
-  ) {
-    effect(() => {
-      const profile = this.profile();
-      const user = userSignal();
-      if (profile === undefined) {
-        if (!user) {
-          return;
-        } else {
-          this.userModel.set(this.filterEmptyPipe.transform(user));
+    private readonly userService: UserService,
+    private readonly snackBar: MatSnackBar,
+  ) {}
+
+  update(dto: UpdateUserDto): void {
+    this.userService.userControllerUpdate(dto).subscribe({
+      next: () => {
+        const currentUser = this.user();
+        if (currentUser) {
+          userSignal.set({
+            ...currentUser,
+            email: dto.email ?? currentUser.email,
+            firstName: dto.firstName ?? currentUser.firstName,
+            name: dto.name ?? currentUser.name,
+          });
         }
-      } else {
-        this.userModel.set(this.filterEmptyPipe.transform(profile));
-      }
+        this.snackBar.open('Sauvegardé', 'Fermer', {duration: 5000});
+      },
+      error: (error: {error?: {message?: string}}) => {
+        this.snackBar.open(
+          `Échec : ${error.error?.message ?? 'Une erreur est survenue'}`,
+          'Fermer',
+          {duration: 10000, panelClass: ['red-snackbar']},
+        );
+      },
     });
   }
-
-  passwordValid() : boolean {
-    return this.passwordForm().dirty() ? this.passwordForm().valid() : true;
-  }
-
-  valid(): boolean {
-    return this.userForm().valid() && this.passwordValid();
-  }
-
-  save(event: Event) {
-    event.preventDefault();
-    const dto: UpdateUserDto = {...this.userModel()};
-    if (this.passwordForm().dirty()) {
-      dto.password = this.passwordModel().password;
-    }
-    if (this.valid()) {
-      this.userService.userControllerUpdate(dto).subscribe({
-        next: () => {
-          this._snackBar.open(`Sauvegardé`, 'Fermer', {
-            duration: 10000,
-          });
-        },
-        error: (error) => {
-          this._snackBar.open(`Echec : ${error.error.message}`, 'Fermer', {
-            duration: 10000,
-            panelClass: ['red-snackbar'],
-          });
-        }
-      });
-    }
-  }
-
 }
