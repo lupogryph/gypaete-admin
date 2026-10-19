@@ -1,0 +1,59 @@
+<form (submit)="saveForm($event)">
+  <mat-card>
+    <mat-card-content class="form">
+      <mat-form-field>
+        <mat-icon matPrefix>email</mat-icon>
+        <mat-label>E-mail</mat-label>
+        <input matInput type="email" [formField]="userForm.email">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-icon matPrefix>person</mat-icon>
+        <mat-label>Prénom</mat-label>
+        <input matInput [formField]="userForm.firstName">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-icon matPrefix>person</mat-icon>
+        <mat-label>Nom</mat-label>
+        <input matInput [formField]="userForm.name">
+      </mat-form-field>
+      @if (admin()) {
+        <mat-form-field>
+          <mat-icon matPrefix>admin_panel_settings</mat-icon>
+          <mat-label>Profil</mat-label>
+          <mat-select [formField]="userForm.role">
+            <mat-option value="user">Utilisateur</mat-option>
+            <mat-option value="admin">Administrateur</mat-option>
+          </mat-select>
+        </mat-form-field>
+      }
+    </mat-card-content>
+
+    <mat-card-content class="form">
+      <mat-form-field>
+        <mat-icon matPrefix>password</mat-icon>
+        <mat-label>Mot de passe</mat-label>
+        <input matInput type="password" [formField]="passwordForm.password">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-icon matPrefix>password</mat-icon>
+        <mat-label>Vérifier le mot de passe</mat-label>
+        <input matInput type="password" [formField]="passwordForm.repassword">
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      @if (admin() && canDelete() && user()) {
+        <button mat-button type="button" (click)="delete.emit()">Supprimer</button>
+      }
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="!valid() || (!isNew() && !userForm().dirty() && !passwordForm().dirty())"
+      >
+        <mat-icon>done</mat-icon>
+        Sauvegarder
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>
