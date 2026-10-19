@@ -1,6 +1,6 @@
-import {Component, effect, input, signal} from '@angular/core';
+import {Component, effect, input, signal, ChangeDetectionStrategy} from '@angular/core';
 import {Role, UpdateUserDto, UserDto, UserService} from '../../openapi';
-import {email, Field, form, required, validate} from '@angular/forms/signals';
+import {email, FormField, form, required, validate} from '@angular/forms/signals';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatCard, MatCardActions, MatCardContent} from '@angular/material/card';
 import {MatFormField, MatInput, MatLabel, MatPrefix} from '@angular/material/input';
@@ -14,6 +14,7 @@ import {FilterEmptyPipe} from '../../shared/pipes/filter-empty.pipe';
 @Component({
   selector: 'app-user-profile',
   imports: [
+    FormField,
     ReactiveFormsModule,
     MatCard,
     MatCardContent,
@@ -23,13 +24,13 @@ import {FilterEmptyPipe} from '../../shared/pipes/filter-empty.pipe';
     MatSelect,
     MatOption,
     MatInput,
-    Field,
     MatCardActions,
     MatButton,
     MatPrefix
   ],
   providers: [FilterEmptyPipe],
   templateUrl: './user-profile.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './user-profile.scss',
 })
 export class UserProfile {

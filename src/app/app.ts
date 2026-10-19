@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {Router, RouterOutlet} from '@angular/router';
 import {AuthService} from './openapi';
 import {Topbar} from './topbar/topbar';
@@ -10,6 +10,7 @@ import {JwtService} from './core/auth/jwt.service';
   standalone: true,
   imports: [RouterOutlet, Topbar],
   templateUrl: './app.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.scss',
 })
 export class App {
@@ -27,7 +28,7 @@ export class App {
     } else {
       this.auth.authControllerProfile().subscribe({
         next: () => this.currentUserService.setUser(),
-        error: (error) => {
+        error: () => {
           this.jwtService.clearToken();
           this.router.navigate(['login']);
         },
