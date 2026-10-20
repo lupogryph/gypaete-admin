@@ -27,8 +27,7 @@ Administration features :
 
 ## Technology
 
-Angular 22
-Angular Material
+Angular 22 / Angular Material
 
 ## Development server
 
