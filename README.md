@@ -27,9 +27,16 @@ Administration features :
 
 ## Technology
 
-Angular 22 / Angular Material
+Angular 22 / Angular Material / openapi-generation
 
 ## Development server
+
+The NestJS backend [gypaete-back](https://github.com/lupogryph/gypaete-back) must be running in dev mode to access the generated openapi yaml/json
+
+Autogenerate the API methods with
+```
+npm api:generate
+```
 
 To start a local development server, run:
 
