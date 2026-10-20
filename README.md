@@ -1,6 +1,34 @@
-# GypaeteAdmin
+# Gypaete Admin
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.4.
+Administration Frontend, part of the micro-CMS I created, for the administration of the website (another frontend)
+
+This CMS is dedicated to the managment of a locative proprerty
+
+Administration features :
+- Home page
+- House
+  - description
+  - photo upload / gallery
+  - services
+  - tarifs
+- Rooms
+  - Create, Delete Room
+  - Room
+    - description
+    - photo upload / gallery
+    - services
+    - tarifs
+- Reservation
+  - links to reservation thirdparties
+  - (not implemented yet) Reservation management with calendar
+- Social informations
+- Contact informations
+- User managment
+
+## Technology
+
+Angular 22
+Angular Material
 
 ## Development server
 
