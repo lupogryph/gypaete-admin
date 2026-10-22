@@ -4,7 +4,7 @@
     mat-flat-button
     class="save-button"
     type="button"
-    [disabled]="!chalet || saving"
+    [disabled]="saving"
     (click)="save()"
   >
     <mat-icon>save</mat-icon>
@@ -35,8 +35,12 @@
           (descriptionChange)="updateDescription($event)"
         ></app-description-form>
       }
-      @case ('photos') {
-        <p>Gestion des photos à venir.</p>
+      @case ('gallerie') {
+        <app-gallery
+          [photos]="chalet().photos"
+          (uploadRequested)="uploadPhotos($event)"
+          (deletePhotos)="deletePhotos($event)"
+        ></app-gallery>
       }
       @case ('nom') {
         <p>Gestion du nom à venir.</p>
