@@ -29,24 +29,17 @@
 
   <section class="dash-content">
     @switch (activeSection) {
-      @case ('description') {
-        <app-description-form
-          [description]="description()"
-          (descriptionChange)="updateDescription($event)"
-        ></app-description-form>
-      }
-      @case ('gallerie') {
-        <app-gallery
-          [photos]="chalet().photos"
-          (uploadRequested)="uploadPhotos($event)"
-          (deletePhotos)="deletePhotos($event)"
-        ></app-gallery>
-      }
+
       @case ('general') {
         <section class="form-section">
           <mat-form-field appearance="outline" class="field">
             <mat-label>Nom du chalet</mat-label>
-            <input matInput [formField]="generalForm.nom" autocomplete="off"/>
+            <input
+              matInput
+              [value]="chalet().nom"
+              (input)="updateName($event)"
+              autocomplete="off"
+            />
           </mat-form-field>
         </section>
         <div class="separation"></div>
@@ -56,17 +49,44 @@
             <input
               matInput
               type="number"
-              [formField]="generalForm.nombrePersonnesBase"
+              [value]="chalet().nombrePersonnesBase ?? ''"
+              (input)="updateNombrePersonnesBase($event)"
             />
           </mat-form-field>
         </section>
+      }
+
+      @case ('description') {
+        <app-description-form
+          [description]="chalet().description"
+          (descriptionChange)="updateDescription($event)"
+        ></app-description-form>
+      }
+
+      @case ('gallery') {
+        <app-gallery
+          [photos]="chalet().photos"
+          (uploadRequested)="uploadPhotos($event)"
+          (deletePhotos)="deletePhotos($event)"
+        ></app-gallery>
+      }
+
+      @case ('pets') {
         <section class="form-section">
-          <mat-slide-toggle [formField]="generalForm.animauxAutorises">
+          <mat-slide-toggle
+            [checked]="chalet().animauxAutorises ?? false"
+            (change)="updateAnimauxAutorises($event)"
+          >
             <mat-icon>pets</mat-icon>
             Animaux autorisés
           </mat-slide-toggle>
         </section>
+        <app-condition-table
+          [conditions]="chalet().animaux ?? []"
+          (conditionsChange)="updateAnimals($event)"
+        ></app-condition-table>
       }
+
     }
   </section>
 </div>

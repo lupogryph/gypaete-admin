@@ -6,19 +6,21 @@ import {MatList, MatListItem, MatListItemIcon} from '@angular/material/list';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatToolbar} from '@angular/material/toolbar';
 import {DescriptionForm} from '../../shared/description-form/description-form';
-import {ChaletDto, ChaletService, CreatePhotoDto, FrEn, PhotoDto, UpdateChaletDto} from '../../openapi';
+import {ChaletDto, ChaletService, ConditionDto, CreatePhotoDto, FrEn, PhotoDto, UpdateChaletDto} from '../../openapi';
 import {Gallery} from '../../shared/photos/gallery/gallery';
 import {PhotoUploadRequest} from '../../shared/photos/photo-upload-dialog/photo-upload-dialog';
 import {Observable, defaultIfEmpty, forkJoin} from 'rxjs';
 import {finalize, switchMap} from 'rxjs/operators';
-import {FormField, form} from '@angular/forms/signals';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {MatSlideToggle, MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {ConditionTable} from '../../shared/condition-table/condition-table';
 
 const dashList = [
   {id: 'general', label: 'General', icon: 'home'},
   {id: 'description', label: 'Description', icon: 'description'},
-  {id: 'gallerie', label: 'Gallerie', icon: 'photo_library'},
+  {id: 'gallery', label: 'Gallerie', icon: 'photo_library'},
+  {id: 'pets', label: 'Animaux', icon: 'pets'},
+  {id: 'services', label: 'Prestations', icon: 'list'},
 ] as const;
 
 type DashboardSection = (typeof dashList)[number]['id'];
@@ -34,11 +36,11 @@ type DashboardSection = (typeof dashList)[number]['id'];
     MatListItemIcon,
     MatToolbar,
     Gallery,
-    FormField,
     MatFormField,
     MatInput,
     MatLabel,
     MatSlideToggle,
+    ConditionTable,
   ],
   selector: 'app-chalet',
   styleUrl: './chalet-dashboard.scss',
@@ -47,24 +49,10 @@ type DashboardSection = (typeof dashList)[number]['id'];
 export class ChaletDashboard {
 
   readonly chalet = signal<ChaletDto>({
-    nom: "undefined",
-    id: 0,
-    photos: []
-  });
-
-  readonly description = signal<FrEn>({fr: ''});
-
-  readonly generalModel = signal<{
-    nom: string;
-    nombrePersonnesBase: number;
-    animauxAutorises: boolean;
-  }>({
     nom: '',
-    nombrePersonnesBase: 1,
-    animauxAutorises: false,
+    id: 0,
+    photos: [],
   });
-
-  readonly generalForm = form(this.generalModel);
 
   readonly dashList = dashList;
 
@@ -84,9 +72,34 @@ export class ChaletDashboard {
     });
   }
 
-  updateDescription(description: FrEn): void {
-    this.description.set(description);
+  updateDescription(description: FrEn | undefined): void {
     this.chalet.update((chalet) => ({...chalet, description}));
+  }
+
+  updateName(event: Event): void {
+    const input = event.target;
+    if (input instanceof HTMLInputElement) {
+      this.chalet.update((chalet) => ({...chalet, nom: input.value}));
+    }
+  }
+
+  updateNombrePersonnesBase(event: Event): void {
+    const input = event.target;
+    if (input instanceof HTMLInputElement) {
+      const nombrePersonnesBase = input.value === '' ? undefined : input.valueAsNumber;
+      this.chalet.update((chalet) => ({...chalet, nombrePersonnesBase}));
+    }
+  }
+
+  updateAnimauxAutorises(event: MatSlideToggleChange): void {
+    this.chalet.update((chalet) => ({...chalet, animauxAutorises: event.checked}));
+  }
+
+  updateAnimals(animaux: ConditionDto[] | undefined): void {
+    this.chalet.update((chalet) => ({
+      ...chalet,
+      animaux: chalet.animaux === undefined && animaux?.length === 0 ? undefined : animaux,
+    }));
   }
 
   save(): void {
@@ -94,11 +107,13 @@ export class ChaletDashboard {
       return;
     }
 
+    const {nom, nombrePersonnesBase, animauxAutorises, description, animaux} = this.chalet();
     const update: UpdateChaletDto = {
-      nom: this.generalModel().nom,
-      nombrePersonnesBase: this.generalModel().nombrePersonnesBase,
-      animauxAutorises: this.generalModel().animauxAutorises,
-      description: this.description(),
+      nom,
+      ...(nombrePersonnesBase !== undefined ? {nombrePersonnesBase} : {}),
+      ...(animauxAutorises !== undefined ? {animauxAutorises} : {}),
+      ...(description !== undefined ? {description} : {}),
+      ...(animaux !== undefined ? {animaux} : {}),
     };
     this.saving = true;
     this.chaletService.chaletControllerUpdate(update).subscribe({
@@ -180,12 +195,6 @@ export class ChaletDashboard {
 
   private setChalet(chalet: ChaletDto): void {
     this.chalet.set({...chalet, photos: [...chalet.photos]});
-    this.generalModel.set({
-      nom: chalet.nom,
-      nombrePersonnesBase: chalet.nombrePersonnesBase ?? 1,
-      animauxAutorises: chalet.animauxAutorises ?? false,
-    });
-    this.description.set(chalet.description ?? {fr: ''});
   }
 
   private showPhotoError(error: { error?: { message?: string } }): void {

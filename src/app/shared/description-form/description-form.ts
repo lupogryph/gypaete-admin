@@ -2,17 +2,18 @@ import {Component, effect, model, signal, untracked} from '@angular/core';
 import {FormField, form} from '@angular/forms/signals';
 import {FrEn} from '../../openapi';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {MatButton} from '@angular/material/button';
+import {MatButton, MatIconButton} from '@angular/material/button';
 import {TranslationService} from '../../core/translation/translation.service';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
-  imports: [FormField, MatFormField, MatLabel, MatInput, MatButton],
+  imports: [FormField, MatFormField, MatLabel, MatInput, MatButton, MatIcon],
   selector: 'app-description-form',
   styleUrl: './description-form.scss',
   templateUrl: './description-form.html',
 })
 export class DescriptionForm {
-  readonly description = model<FrEn>({fr: ''});
+  readonly description = model<FrEn | undefined>(undefined);
   private readonly formModel = signal({fr: '', en: ''});
   readonly hasEnglish = signal(false);
   readonly descriptionForm = form(this.formModel);
@@ -22,19 +23,22 @@ export class DescriptionForm {
   constructor(private readonly translationService: TranslationService) {
     effect(() => {
       const description = this.description();
-      const en = description.en ?? '';
+      const fr = description?.fr ?? '';
+      const en = description?.en ?? '';
       untracked(() => {
         const current = this.formModel();
-        if (current.fr !== description.fr || current.en !== en) {
-          this.formModel.set({fr: description.fr, en});
+        if (current.fr !== fr || current.en !== en) {
+          this.formModel.set({fr, en});
         }
-        this.hasEnglish.set(description.en !== undefined);
+        this.hasEnglish.set(description?.en !== undefined);
       });
     });
 
     effect(() => {
       const {fr, en} = this.formModel();
-      this.description.set(this.hasEnglish() ? {fr, en} : {fr});
+      this.description.set(
+        this.hasEnglish() ? {fr, en} : fr ? {fr} : undefined,
+      );
     });
   }
 

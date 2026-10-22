@@ -16,14 +16,7 @@
     (click)="addEn()"
     [disabled]="translating"
     color="primary"
-  >
-    {{
-      translating
-        ? 'Traduction en cours…'
-        : hasEnglish()
-          ? 'Traduire à nouveau'
-          : 'Ajouter description en Anglais'
-    }}
+  ><mat-icon>translate</mat-icon> Traduire
   </button>
   @if (translationError) {
     <p role="alert">{{ translationError }}</p>
