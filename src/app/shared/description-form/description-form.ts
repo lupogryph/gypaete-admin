@@ -7,7 +7,7 @@ import {TranslationService} from '../../core/translation/translation.service';
 import {MatIcon} from '@angular/material/icon';
 
 @Component({
-  imports: [FormField, MatFormField, MatLabel, MatInput, MatButton, MatIcon],
+  imports: [FormField, MatFormField, MatLabel, MatInput, MatIcon, MatIconButton],
   selector: 'app-description-form',
   styleUrl: './description-form.scss',
   templateUrl: './description-form.html',
@@ -62,5 +62,10 @@ export class DescriptionForm {
     } finally {
       this.translating = false;
     }
+  }
+
+  deleteEn() {
+    this.formModel.update((value) => ({...value, en: ''}));
+    this.hasEnglish.set(false);
   }
 }

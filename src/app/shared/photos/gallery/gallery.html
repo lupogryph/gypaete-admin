@@ -17,7 +17,7 @@
       [attr.aria-label]="'Sélectionner la photo ' + (i + 1)"
       (click)="toggleSelection(photo)"
     >
-      <img class="gallery-image" [src]="photo.url" [alt]="'Photo ' + (i + 1)" />
+      <img class="gallery-image" [src]="photo.thumbnailUrl || photo.url" [alt]="'Photo ' + (i + 1)" />
     </button>
   }
   @if (selection().length > 0) {

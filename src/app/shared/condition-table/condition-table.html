@@ -27,6 +27,13 @@
           color="primary"
         ><mat-icon>translate</mat-icon>
         </button>
+        @if (row.controls.hasEnglish.value) {
+          <button
+            type="button"
+            mat-icon-button
+            (click)="deleteEn(row)"
+          ><mat-icon>subtitles_off</mat-icon></button>
+        }
       </div>
       @if (row.controls.translationError.value) {
         <p role="alert">{{ row.controls.translationError.value }}</p>

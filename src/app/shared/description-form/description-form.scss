@@ -12,3 +12,8 @@ textarea[matInput] {
   min-height: 200px;
   resize: vertical;
 }
+
+.actions {
+  display: flex;
+  gap: 15px;
+}

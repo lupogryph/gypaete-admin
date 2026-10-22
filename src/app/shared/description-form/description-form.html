@@ -8,16 +8,22 @@
     <textarea matInput [formField]="descriptionForm.en"></textarea>
   </mat-form-field>
 }
-<div>
+<div class="actions">
   <button
     type="button"
-    mat-button
-    mat-stroked-button
+    mat-icon-button
     (click)="addEn()"
     [disabled]="translating"
     color="primary"
-  ><mat-icon>translate</mat-icon> Traduire
+  ><mat-icon>translate</mat-icon>
   </button>
+  @if (hasEnglish()) {
+  <button
+    type="button"
+    mat-icon-button
+    (click)="deleteEn()"
+    ><mat-icon>subtitles_off</mat-icon></button>
+  }
   @if (translationError) {
     <p role="alert">{{ translationError }}</p>
   }

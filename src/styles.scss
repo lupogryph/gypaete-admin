@@ -105,6 +105,7 @@ section {
 .toolbar {
   gap: 16px;
   flex: 0 0 auto;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
 
   .title {
     min-width: 235px;

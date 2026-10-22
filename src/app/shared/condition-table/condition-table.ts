@@ -94,6 +94,11 @@ export class ConditionTable {
     }
   }
 
+  deleteEn(conditionForm: ConditionForm) {
+    conditionForm.controls.condition.controls.en.setValue('');
+    conditionForm.controls.hasEnglish.setValue(false);
+  }
+
   private createConditionForm(condition?: ConditionDto): ConditionForm {
     return new FormGroup({
       condition: new FormGroup({
