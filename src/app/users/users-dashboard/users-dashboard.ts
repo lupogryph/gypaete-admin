@@ -10,7 +10,7 @@ import {MatToolbar} from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-users-dashboard',
-  imports: [UsersList, UserForm, MatButton, MatIcon, MatToolbar],
+  imports: [UsersList, UserForm, MatToolbar],
   templateUrl: './users-dashboard.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './users-dashboard.scss',
