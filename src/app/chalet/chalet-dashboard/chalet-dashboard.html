@@ -42,8 +42,30 @@
           (deletePhotos)="deletePhotos($event)"
         ></app-gallery>
       }
-      @case ('nom') {
-        <p>Gestion du nom à venir.</p>
+      @case ('general') {
+        <section class="form-section">
+          <mat-form-field appearance="outline" class="field">
+            <mat-label>Nom du chalet</mat-label>
+            <input matInput [formField]="generalForm.nom" autocomplete="off"/>
+          </mat-form-field>
+        </section>
+        <div class="separation"></div>
+        <section class="form-section">
+          <mat-form-field appearance="outline" class="field">
+            <mat-label>Nombre de personnes de base</mat-label>
+            <input
+              matInput
+              type="number"
+              [formField]="generalForm.nombrePersonnesBase"
+            />
+          </mat-form-field>
+        </section>
+        <section class="form-section">
+          <mat-slide-toggle [formField]="generalForm.animauxAutorises">
+            <mat-icon>pets</mat-icon>
+            Animaux autorisés
+          </mat-slide-toggle>
+        </section>
       }
     }
   </section>

@@ -11,9 +11,12 @@ import {Gallery} from '../../shared/photos/gallery/gallery';
 import {PhotoUploadRequest} from '../../shared/photos/photo-upload-dialog/photo-upload-dialog';
 import {Observable, defaultIfEmpty, forkJoin} from 'rxjs';
 import {finalize, switchMap} from 'rxjs/operators';
+import {FormField, form} from '@angular/forms/signals';
+import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
 
 const dashList = [
-  {id: 'nom', label: 'Nom', icon: 'home'},
+  {id: 'general', label: 'General', icon: 'home'},
   {id: 'description', label: 'Description', icon: 'description'},
   {id: 'gallerie', label: 'Gallerie', icon: 'photo_library'},
 ] as const;
@@ -31,20 +34,42 @@ type DashboardSection = (typeof dashList)[number]['id'];
     MatListItemIcon,
     MatToolbar,
     Gallery,
+    FormField,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatSlideToggle,
   ],
   selector: 'app-chalet',
   styleUrl: './chalet-dashboard.scss',
   templateUrl: './chalet-dashboard.html',
 })
 export class ChaletDashboard {
+
   readonly chalet = signal<ChaletDto>({
     nom: "undefined",
     id: 0,
     photos: []
   });
+
   readonly description = signal<FrEn>({fr: ''});
+
+  readonly generalModel = signal<{
+    nom: string;
+    nombrePersonnesBase: number;
+    animauxAutorises: boolean;
+  }>({
+    nom: '',
+    nombrePersonnesBase: 1,
+    animauxAutorises: false,
+  });
+
+  readonly generalForm = form(this.generalModel);
+
   readonly dashList = dashList;
-  activeSection: DashboardSection = 'nom';
+
+  activeSection: DashboardSection = 'general';
+
   saving = false;
 
   constructor(
@@ -55,12 +80,7 @@ export class ChaletDashboard {
 
   ngOnInit() {
     this.chaletService.chaletControllerFind().subscribe((chalet) => {
-      this.description.set(chalet.description ?? {fr: ''});
-      this.chalet.set({
-        ...chalet,
-        description: this.description(),
-        photos: [...chalet.photos],
-      });
+      this.setChalet(chalet);
     });
   }
 
@@ -75,14 +95,15 @@ export class ChaletDashboard {
     }
 
     const update: UpdateChaletDto = {
-      nom: this.chalet().nom,
+      nom: this.generalModel().nom,
+      nombrePersonnesBase: this.generalModel().nombrePersonnesBase,
+      animauxAutorises: this.generalModel().animauxAutorises,
       description: this.description(),
     };
     this.saving = true;
     this.chaletService.chaletControllerUpdate(update).subscribe({
       next: (updatedChalet) => {
-        this.chalet.set(updatedChalet);
-        this.description.set(updatedChalet.description ?? {fr: ''});
+        this.setChalet(updatedChalet);
         this.snackBar.open('Sauvegardé', 'Fermer', {duration: 5000});
       },
       error: (error: { error?: { message?: string } }) => {
@@ -128,8 +149,7 @@ export class ChaletDashboard {
       )
       .subscribe({
         next: (chalet) => {
-          this.chalet.set({...chalet, photos: [...chalet.photos]});
-          this.description.set(chalet.description ?? {fr: ''});
+          this.setChalet(chalet);
           this.snackBar.open('Photos ajoutées', 'Fermer', {duration: 5000});
         },
         error: (error: { error?: { message?: string } }) => this.showPhotoError(error),
@@ -147,8 +167,7 @@ export class ChaletDashboard {
       )
       .subscribe({
         next: (chalet) => {
-          this.chalet.set({...chalet, photos: [...chalet.photos]});
-          this.description.set(chalet.description ?? {fr: ''});
+          this.setChalet(chalet);
           this.snackBar.open('Photos supprimées', 'Fermer', {duration: 5000});
         },
         error: (error: { error?: { message?: string } }) => this.showPhotoError(error),
@@ -157,6 +176,16 @@ export class ChaletDashboard {
 
   deletePhoto(photo: PhotoDto) {
     return this.chaletService.chaletControllerDeletePhoto(photo.id);
+  }
+
+  private setChalet(chalet: ChaletDto): void {
+    this.chalet.set({...chalet, photos: [...chalet.photos]});
+    this.generalModel.set({
+      nom: chalet.nom,
+      nombrePersonnesBase: chalet.nombrePersonnesBase ?? 1,
+      animauxAutorises: chalet.animauxAutorises ?? false,
+    });
+    this.description.set(chalet.description ?? {fr: ''});
   }
 
   private showPhotoError(error: { error?: { message?: string } }): void {
