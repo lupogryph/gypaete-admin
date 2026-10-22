@@ -1,7 +1,11 @@
+<mat-toolbar class="toolbar">
+  <span class="title">Utilisateurs</span>
+</mat-toolbar>
+
+<div class="dash-layout">
 @if (user(); as currentUser) {
   @if (currentUser.role === Role.Admin) {
-    <section class="row">
-      <div class="liste">
+      <div class="dash-navigation">
         <app-users-list
           [me]="currentUser"
           [users]="users()"
@@ -11,7 +15,7 @@
         />
       </div>
 
-      <section class="panneau sm">
+      <section class="dash-content sm">
         @if (creatingUser) {
           <app-user-form
             [admin]="true"
@@ -28,6 +32,6 @@
           />
         }
       </section>
-    </section>
   }
 }
+</div>

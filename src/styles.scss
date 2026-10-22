@@ -95,6 +95,72 @@ section {
   flex: 1 1 auto;
 }
 
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.toolbar {
+  gap: 16px;
+  flex: 0 0 auto;
+
+  .title {
+    min-width: 235px;
+  }
+}
+
+.dash-layout {
+  display: grid;
+  grid-template-columns: minmax(200px, 250px) minmax(0, 1fr);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.dash-navigation {
+  border-right: 1px solid var(--mat-sys-outline-variant);
+}
+
+.dash-navigation mat-list-item {
+  cursor: pointer;
+}
+
+.dash-navigation mat-list-item.selected {
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
+
+.dash-content {
+  min-width: 0;
+  padding: 16px 24px;
+}
+
+.dash-navigation,
+.dash-content {
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.dash-navigation::-webkit-scrollbar,
+.dash-content::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .dash-layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .dash-navigation {
+    border-right: 0;
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
+}
+
 .mat-mdc-snack-bar-container {
   &.red-snackbar {
     --mdc-snackbar-container-color: #941818;

@@ -1,0 +1,17 @@
+<mat-form-field appearance="fill">
+  <mat-label>Description (français)</mat-label>
+  <textarea matInput [formField]="descriptionForm.fr"></textarea>
+</mat-form-field>
+@if (descriptionForm.en !== undefined) {
+<mat-form-field appearance="fill">
+  <mat-label>Description (anglais)</mat-label>
+  <textarea matInput [formField]="descriptionForm.en"></textarea>
+</mat-form-field>
+}
+@else {
+<div>
+  <button type="button" mat-button mat-stroked-button (click)="addEn()" color="primary">
+    Ajouter description en Anglais
+  </button>
+</div>
+}

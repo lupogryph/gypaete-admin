@@ -1,4 +1,4 @@
-<mat-list>
+<mat-list class="dash-navigation">
   <mat-list-item
     matRipple
     [class.selected]="selected(null)"
@@ -23,7 +23,11 @@
   }
 
   <mat-divider></mat-divider>
-  <mat-list-item matRipple (click)="add.emit()">
+  <mat-list-item
+    matRipple
+    [class.selected]="selected(-1)"
+    (click)="add.emit()"
+  >
     <mat-icon matListItemIcon>add</mat-icon>
     <div matListItemTitle>Ajouter un utilisateur</div>
   </mat-list-item>

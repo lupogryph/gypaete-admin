@@ -4,10 +4,13 @@ import {userSignal} from '../../../main';
 import {CreateUserDto, Role, UpdateUserDto, UserDto, UserService} from '../../openapi';
 import {UserForm} from '../user-form/user-form';
 import {UsersList} from '../users-list/users-list';
+import {MatButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatToolbar} from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-users-dashboard',
-  imports: [UsersList, UserForm],
+  imports: [UsersList, UserForm, MatButton, MatIcon, MatToolbar],
   templateUrl: './users-dashboard.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './users-dashboard.scss',
@@ -44,7 +47,7 @@ export class UsersDashboard implements OnInit {
   }
 
   add(): void {
-    this.cursor = null;
+    this.cursor = -1;
     this.creatingUser = true;
   }
 
