@@ -1,0 +1,46 @@
+<mat-toolbar class="toolbar">
+  <span class="title">Chalet</span>
+  <button
+    mat-flat-button
+    class="save-button"
+    type="button"
+    [disabled]="!chalet || saving"
+    (click)="save()"
+  >
+    <mat-icon>save</mat-icon>
+    Sauvegarder
+  </button>
+</mat-toolbar>
+
+<div class="dash-layout">
+  <mat-list class="dash-navigation" aria-label="Sections du chalet">
+    @for (item of dashList; track item.id) {
+      <mat-list-item
+        matRipple
+        [class.selected]="activeSection === item.id"
+        [attr.aria-current]="activeSection === item.id ? 'page' : null"
+        (click)="activeSection = item.id"
+      >
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <div matListItemTitle>{{ item.label }}</div>
+      </mat-list-item>
+    }
+  </mat-list>
+
+  <section class="dash-content">
+    @switch (activeSection) {
+      @case ('description') {
+        <app-description-form
+          [description]="description()"
+          (descriptionChange)="updateDescription($event)"
+        ></app-description-form>
+      }
+      @case ('photos') {
+        <p>Gestion des photos à venir.</p>
+      }
+      @case ('nom') {
+        <p>Gestion du nom à venir.</p>
+      }
+    }
+  </section>
+</div>

@@ -2,16 +2,30 @@
   <mat-label>Description (français)</mat-label>
   <textarea matInput [formField]="descriptionForm.fr"></textarea>
 </mat-form-field>
-@if (descriptionForm.en !== undefined) {
-<mat-form-field appearance="fill">
-  <mat-label>Description (anglais)</mat-label>
-  <textarea matInput [formField]="descriptionForm.en"></textarea>
-</mat-form-field>
+@if (hasEnglish()) {
+  <mat-form-field appearance="fill">
+    <mat-label>Description (anglais)</mat-label>
+    <textarea matInput [formField]="descriptionForm.en"></textarea>
+  </mat-form-field>
 }
-@else {
 <div>
-  <button type="button" mat-button mat-stroked-button (click)="addEn()" color="primary">
-    Ajouter description en Anglais
+  <button
+    type="button"
+    mat-button
+    mat-stroked-button
+    (click)="addEn()"
+    [disabled]="translating"
+    color="primary"
+  >
+    {{
+      translating
+        ? 'Traduction en cours…'
+        : hasEnglish()
+          ? 'Traduire à nouveau'
+          : 'Ajouter description en Anglais'
+    }}
   </button>
+  @if (translationError) {
+    <p role="alert">{{ translationError }}</p>
+  }
 </div>
-}
