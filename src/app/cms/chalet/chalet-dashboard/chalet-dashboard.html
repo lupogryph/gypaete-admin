@@ -104,6 +104,10 @@
       }
 
       @case ('tarifs') {
+        <app-chalet-period-table
+          [periodes]="chalet().periodes ?? []"
+          (periodesChange)="update('periodes', $event)"
+        ></app-chalet-period-table>
       }
 
     }

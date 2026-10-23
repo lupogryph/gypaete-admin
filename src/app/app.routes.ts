@@ -1,6 +1,6 @@
 import {Routes} from '@angular/router';
 import {Login} from './login/login';
-import {ChaletDashboard} from './cms/chalet/chalet-dashboard/./chalet-dashboard';
+import {ChaletDashboard} from './cms/chalet/chalet-dashboard/chalet-dashboard';
 import {Chambres} from './cms/chambres/chambres';
 import {UsersDashboard} from './admin/users/users-dashboard/users-dashboard';
 import {UserProfile} from './admin/users/user-profile/user-profile';

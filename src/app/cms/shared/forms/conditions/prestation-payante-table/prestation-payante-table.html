@@ -1,13 +1,13 @@
 <table
   mat-table
   [dataSource]="formArray.controls"
-  class="condition-table"
+  class="table"
 >
   <ng-container matColumnDef="condition">
     <th mat-header-cell *matHeaderCellDef>Condition</th>
     <td mat-cell *matCellDef="let row" [formGroup]="row">
-      <div class="condition-cell">
-        <div class="condition-fields" formGroupName="condition">
+      <div class="cell">
+        <div class="fields" formGroupName="condition">
           <mat-form-field appearance="outline">
             <mat-label>Français</mat-label>
             <input matInput formControlName="fr"/>

@@ -168,6 +168,61 @@ section {
   }
 }
 
+.table {
+  width: 100%;
+
+  .cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .fields {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 8px;
+
+    mat-form-field {
+      flex: 1;
+      min-width: 140px;
+    }
+  }
+
+  th {
+    font-weight: 600;
+    text-align: left;
+  }
+
+  td {
+    padding: 12px 8px;
+  }
+
+  td mat-form-field {
+    width: 100%;
+    min-width: 140px;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .table {
+    min-width: 680px;
+
+    :host {
+      display: block;
+      overflow-x: auto;
+    }
+
+    .cell {
+      align-items: flex-start;
+    }
+  }
+}
+
 .mat-mdc-snack-bar-container {
   &.red-snackbar {
     --mdc-snackbar-container-color: #941818;

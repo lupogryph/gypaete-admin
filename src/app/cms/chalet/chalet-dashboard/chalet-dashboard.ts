@@ -17,6 +17,7 @@ import {ConditionTable} from '../../shared/forms/conditions/condition-table/cond
 import {FrenTable} from '../../shared/forms/fren-table/fren-table';
 import {updateField} from '../../shared/utils/update-field';
 import {PrestationPayanteTable} from '../../shared/forms/conditions/prestation-payante-table/prestation-payante-table';
+import {ChaletPeriodTable} from '../chalet-period-table/chalet-period-table';
 
 const dashList = [
   {id: 'general', label: 'General', icon: 'home'},
@@ -48,6 +49,7 @@ type DashboardSection = (typeof dashList)[number]['id'];
     ConditionTable,
     FrenTable,
     PrestationPayanteTable,
+    ChaletPeriodTable,
   ],
   selector: 'app-chalet',
   styleUrl: './chalet-dashboard.scss',
