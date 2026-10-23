@@ -66,7 +66,7 @@ export class ChaletPeriodTable {
 
   @ViewChild(MatTable) private table?: MatTable<PeriodeForm>;
 
-  readonly columns = ['debut', 'fin', 'cout', 'par', 'actions'];
+  readonly columns = ['periode', 'cout', 'par', 'actions'];
   readonly temporalites = Object.values(Temporalite);
   readonly formArray = new FormArray<PeriodeForm>([]);
 
