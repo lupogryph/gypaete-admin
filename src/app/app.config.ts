@@ -9,6 +9,8 @@ import { Configuration } from './openapi';
 import localeFr from '@angular/common/locales/fr';
 import { registerLocaleData } from '@angular/common';
 import {JwtService} from './core/auth/jwt.service';
+import {MAT_ICON_DEFAULT_OPTIONS} from '@angular/material/icon';
+
 registerLocaleData(localeFr);
 
 export const appConfig: ApplicationConfig = {
@@ -26,5 +28,6 @@ export const appConfig: ApplicationConfig = {
       deps: [JwtService],
       multi: false,
     },
+    {provide: MAT_ICON_DEFAULT_OPTIONS, useValue: {fontSet: 'material-symbols-outlined'}}
   ],
 };

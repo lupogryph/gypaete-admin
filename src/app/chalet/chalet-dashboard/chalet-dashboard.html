@@ -21,7 +21,7 @@
         [attr.aria-current]="activeSection === item.id ? 'page' : null"
         (click)="activeSection = item.id"
       >
-        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <mat-icon matListItemIcon fontSet="material-symbols-outlined">{{ item.icon }}</mat-icon>
         <div matListItemTitle>{{ item.label }}</div>
       </mat-list-item>
     }
@@ -35,10 +35,10 @@
           <mat-form-field appearance="outline" class="field">
             <mat-label>Nom du chalet</mat-label>
             <input
-              #input
+              #inputNom
               matInput
               [value]="chalet().nom"
-              (input)="update('nom', input.value)"
+              (input)="update('nom', inputNom.value)"
               autocomplete="off"
             />
           </mat-form-field>
@@ -48,14 +48,11 @@
           <mat-form-field appearance="outline" class="field">
             <mat-label>Nombre de personnes de base</mat-label>
             <input
-              #input
+              #inputNombrePersonnesBase
               matInput
               type="number"
               [value]="chalet().nombrePersonnesBase ?? ''"
-              (input)="update(
-                'nombrePersonnesBase',
-                input.value === '' ? undefined : input.valueAsNumber
-              )"
+              (input)="update('nombrePersonnesBase', inputNombrePersonnesBase.valueAsNumber)"
             />
           </mat-form-field>
         </section>
@@ -97,6 +94,12 @@
           [frens]="chalet().prestations ?? []"
           (frensChange)="update('prestations', $event)"
         ></app-fren-table>
+      }
+
+      @case ('paid-services') {
+      }
+
+      @case ('tarifs') {
       }
 
     }

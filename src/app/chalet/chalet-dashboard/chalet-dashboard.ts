@@ -22,7 +22,9 @@ const dashList = [
   {id: 'description', label: 'Description', icon: 'description'},
   {id: 'gallery', label: 'Gallerie', icon: 'photo_library'},
   {id: 'pets', label: 'Animaux', icon: 'pets'},
-  {id: 'services', label: 'Prestations', icon: 'list'},
+  {id: 'services', label: 'Prestations', icon: 'hand_meal'},
+  {id: 'paid-services', label: 'Prestations Payantes', icon: 'payments'},
+  {id: 'tarifs', label: 'Tarifs', icon: 'price_change'},
 ] as const;
 
 type DashboardSection = (typeof dashList)[number]['id'];
