@@ -36,11 +36,36 @@ export class TranslationService {
 
     for (const part of parts) {
       const isLineBreak = /^(?:\r\n|\r|\n)$/.test(part);
-      translatedParts.push(
-        isLineBreak || !part.trim() ? part : await translator.translate(part),
-      );
+      if (isLineBreak || !part.trim()) {
+        translatedParts.push(part);
+        continue;
+      }
+
+      const translated = await translator.translate(part);
+      translatedParts.push(this.preserveCapitalization(part, translated));
     }
 
     return translatedParts.join('');
+  }
+
+  private preserveCapitalization(source: string, translated: string): string {
+    const letters = source.match(/\p{L}/gu) ?? [];
+    if (letters.length > 0 && letters.every((letter) => letter === letter.toUpperCase())) {
+      return translated.toUpperCase();
+    }
+
+    const firstLetter = source.match(/\p{L}/u)?.[0];
+    if (firstLetter && firstLetter === firstLetter.toUpperCase()) {
+      const characters = Array.from(translated);
+      const translatedFirstLetterIndex = characters.findIndex(
+        (character) => /\p{L}/u.test(character),
+      );
+      if (translatedFirstLetterIndex !== -1) {
+        characters[translatedFirstLetterIndex] = characters[translatedFirstLetterIndex].toUpperCase();
+        return characters.join('');
+      }
+    }
+
+    return translated;
   }
 }

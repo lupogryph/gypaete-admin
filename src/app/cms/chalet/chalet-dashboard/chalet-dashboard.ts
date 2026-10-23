@@ -103,15 +103,7 @@ export class ChaletDashboard {
     if (this.saving) {
       return;
     }
-
-    const {nom, nombrePersonnesBase, animauxAutorises, description, animaux} = this.chalet();
-    const update: UpdateChaletDto = {
-      nom,
-      ...(nombrePersonnesBase !== undefined ? {nombrePersonnesBase} : {}),
-      ...(animauxAutorises !== undefined ? {animauxAutorises} : {}),
-      ...(description !== undefined ? {description} : {}),
-      ...(animaux !== undefined ? {animaux} : {}),
-    };
+    const update: UpdateChaletDto = this.chalet();
     this.saving = true;
     this.chaletService.chaletControllerUpdate(update).subscribe({
       next: (updatedChalet) => {

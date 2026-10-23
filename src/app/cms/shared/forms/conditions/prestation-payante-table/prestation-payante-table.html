@@ -46,7 +46,6 @@
     <th mat-header-cell *matHeaderCellDef>Coût</th>
     <td mat-cell *matCellDef="let row" [formGroup]="row">
       <mat-form-field appearance="outline">
-        <mat-label>Coût</mat-label>
         <input matInput type="number" formControlName="cout"/>
       </mat-form-field>
     </td>
@@ -56,7 +55,6 @@
     <th mat-header-cell *matHeaderCellDef>Par</th>
     <td mat-cell *matCellDef="let row" [formGroup]="row">
       <mat-form-field appearance="outline">
-        <mat-label>Périodicité</mat-label>
         <mat-select formControlName="par">
           <mat-option value="">Aucune</mat-option>
           @for (period of temporalites; track period) {
@@ -77,16 +75,14 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let row; let i = index">
-      <div class="actions">
-        <button
-          matIconButton
-          type="button"
-          [attr.aria-label]="'Supprimer la condition ' + (i + 1)"
-          (click)="remove(i)"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
+      <button
+        matIconButton
+        type="button"
+        [attr.aria-label]="'Supprimer la condition ' + (i + 1)"
+        (click)="remove(i)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
     </td>
   </ng-container>
 

@@ -9,8 +9,8 @@
       <mat-form-field appearance="outline">
         <mat-label>Période</mat-label>
         <mat-date-range-input [rangePicker]="periodePicker">
-          <input matStartDate formControlName="debut" placeholder="Date début" required />
-          <input matEndDate formControlName="fin" placeholder="Date fin" required />
+          <input matStartDate formControlName="debut" placeholder="Date début" required/>
+          <input matEndDate formControlName="fin" placeholder="Date fin" required/>
         </mat-date-range-input>
         <mat-datepicker-toggle matIconSuffix [for]="periodePicker"></mat-datepicker-toggle>
         <mat-date-range-picker #periodePicker></mat-date-range-picker>

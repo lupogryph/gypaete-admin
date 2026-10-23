@@ -1,9 +1,9 @@
-<mat-form-field appearance="fill">
+<mat-form-field appearance="outline">
   <mat-label>Description (français)</mat-label>
   <textarea matInput [formField]="descriptionForm.fr"></textarea>
 </mat-form-field>
 @if (hasEnglish()) {
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>Description (anglais)</mat-label>
     <textarea matInput [formField]="descriptionForm.en"></textarea>
   </mat-form-field>
