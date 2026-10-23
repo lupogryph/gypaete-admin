@@ -4,3 +4,18 @@
 .mat-toolbar {
   gap: 1rem;
 }
+
+a {
+  font-size: large;
+
+  mat-icon {
+    width: 1.7rem;
+    height: 1.7rem;
+    font-size: 1.7rem;
+  }
+}
+
+a.active {
+  background-color: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
