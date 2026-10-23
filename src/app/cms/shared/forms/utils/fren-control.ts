@@ -1,5 +1,5 @@
 import {FormControl, FormGroup} from '@angular/forms';
-import {ConditionDto, FrEn, Temporalite} from '../../../../openapi';
+import {FrEn, Temporalite} from '../../../../openapi';
 
 export interface FrEnControls {
   fr: FormControl<string>;

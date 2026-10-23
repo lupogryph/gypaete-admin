@@ -6,7 +6,7 @@ import {MatList, MatListItem, MatListItemIcon} from '@angular/material/list';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatToolbar} from '@angular/material/toolbar';
 import {DescriptionForm} from '../../shared/forms/description-form/description-form';
-import {ChaletDto, ChaletService, CreatePhotoDto, FrEn, PhotoDto, UpdateChaletDto} from '../../../openapi';
+import {ChaletDto, ChaletService, CreatePhotoDto, PhotoDto, UpdateChaletDto} from '../../../openapi';
 import {Gallery} from '../../shared/photos/gallery/gallery';
 import {PhotoUploadRequest} from '../../shared/photos/photo-upload-dialog/photo-upload-dialog';
 import {Observable, defaultIfEmpty, forkJoin} from 'rxjs';

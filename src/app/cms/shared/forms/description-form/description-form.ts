@@ -2,7 +2,7 @@ import {Component, effect, model, signal, untracked} from '@angular/core';
 import {FormField, form} from '@angular/forms/signals';
 import {FrEn} from '../../../../openapi';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatIconButton} from '@angular/material/button';
 import {TranslationService} from '../../../../core/translation/translation.service';
 import {MatIcon} from '@angular/material/icon';
 
