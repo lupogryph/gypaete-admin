@@ -126,25 +126,6 @@ export class ChaletDashboard {
     });
   }
 
-  // general
-
-  updateName(event: Event): void {
-    const input = event.target;
-    if (input instanceof HTMLInputElement) {
-      this.update('nom', input.value);
-    }
-  }
-
-  updateNombrePersonnesBase(event: Event): void {
-    const input = event.target;
-    if (input instanceof HTMLInputElement) {
-      const nombrePersonnesBase = input.value === '' ? undefined : input.valueAsNumber;
-      this.update('nombrePersonnesBase', nombrePersonnesBase);
-    }
-  }
-
-  // description
-
   // gallery
 
   addPhoto(url: string): Observable<unknown> {
@@ -213,7 +194,5 @@ export class ChaletDashboard {
       {duration: 10000, panelClass: ['red-snackbar']},
     );
   }
-
-  // pets
 
 }

@@ -35,9 +35,10 @@
           <mat-form-field appearance="outline" class="field">
             <mat-label>Nom du chalet</mat-label>
             <input
+              #input
               matInput
               [value]="chalet().nom"
-              (input)="updateName($event)"
+              (input)="update('nom', input.value)"
               autocomplete="off"
             />
           </mat-form-field>
@@ -47,10 +48,14 @@
           <mat-form-field appearance="outline" class="field">
             <mat-label>Nombre de personnes de base</mat-label>
             <input
+              #input
               matInput
               type="number"
               [value]="chalet().nombrePersonnesBase ?? ''"
-              (input)="updateNombrePersonnesBase($event)"
+              (input)="update(
+                'nombrePersonnesBase',
+                input.value === '' ? undefined : input.valueAsNumber
+              )"
             />
           </mat-form-field>
         </section>
