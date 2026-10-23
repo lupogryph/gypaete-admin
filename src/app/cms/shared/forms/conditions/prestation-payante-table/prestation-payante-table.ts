@@ -1,4 +1,4 @@
-import {Component, effect, model, untracked, ViewChild} from '@angular/core';
+import {Component, effect, inject, model, untracked, ViewChild} from '@angular/core';
 import {FormArray, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
@@ -37,6 +37,7 @@ type PresationPayanteForm = FormGroup<PresationPayanteControls>;
   templateUrl: './prestation-payante-table.html',
 })
 export class PrestationPayanteTable {
+  readonly frenFormService = inject(FrenFormService);
   readonly prestations = model<PrestationPayanteDto[]>([]);
 
   @ViewChild(MatTable) private table?: MatTable<PresationPayanteForm>;
@@ -45,12 +46,12 @@ export class PrestationPayanteTable {
   readonly temporalites = Object.values(Temporalite);
   readonly formArray = new FormArray<PresationPayanteForm>([]);
 
-  constructor(private readonly frenFormService: FrenFormService) {
+  constructor() {
     effect(() => {
-      const conditions = this.prestations();
+      const dtos = this.prestations();
       untracked(() => {
-        if (!this.areEqual(this.formValue(), conditions ?? [])) {
-          this.setConditions(conditions ?? []);
+        if (!this.areEqual(this.formValue(), dtos ?? [])) {
+          this.setConditions(dtos ?? []);
         }
       });
     });
