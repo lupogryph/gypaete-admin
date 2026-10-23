@@ -59,7 +59,7 @@
       @case ('description') {
         <app-description-form
           [description]="chalet().description"
-          (descriptionChange)="updateDescription($event)"
+          (descriptionChange)="update('description', $event)"
         ></app-description-form>
       }
 
@@ -75,7 +75,7 @@
         <section class="form-section">
           <mat-slide-toggle
             [checked]="chalet().animauxAutorises ?? false"
-            (change)="updateAnimauxAutorises($event)"
+            (change)="update('animauxAutorises', $event.checked)"
           >
             <mat-icon>pets</mat-icon>
             Animaux autorisés
@@ -83,8 +83,15 @@
         </section>
         <app-condition-table
           [conditions]="chalet().animaux ?? []"
-          (conditionsChange)="updateAnimals($event)"
+          (conditionsChange)="update('animaux', $event)"
         ></app-condition-table>
+      }
+
+      @case ('services') {
+        <app-fren-table
+          [frens]="chalet().prestations ?? []"
+          (frensChange)="update('prestations', $event)"
+        ></app-fren-table>
       }
 
     }

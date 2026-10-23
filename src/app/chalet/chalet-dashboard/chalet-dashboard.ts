@@ -6,14 +6,16 @@ import {MatList, MatListItem, MatListItemIcon} from '@angular/material/list';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatToolbar} from '@angular/material/toolbar';
 import {DescriptionForm} from '../../shared/description-form/description-form';
-import {ChaletDto, ChaletService, ConditionDto, CreatePhotoDto, FrEn, PhotoDto, UpdateChaletDto} from '../../openapi';
+import {ChaletDto, ChaletService, CreatePhotoDto, FrEn, PhotoDto, UpdateChaletDto} from '../../openapi';
 import {Gallery} from '../../shared/photos/gallery/gallery';
 import {PhotoUploadRequest} from '../../shared/photos/photo-upload-dialog/photo-upload-dialog';
 import {Observable, defaultIfEmpty, forkJoin} from 'rxjs';
 import {finalize, switchMap} from 'rxjs/operators';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {MatSlideToggle, MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {ConditionTable} from '../../shared/condition-table/condition-table';
+import {FrenTable} from '../../shared/fren-table/fren-table';
+import {updateField} from '../../shared/utils/update-field';
 
 const dashList = [
   {id: 'general', label: 'General', icon: 'home'},
@@ -41,6 +43,7 @@ type DashboardSection = (typeof dashList)[number]['id'];
     MatLabel,
     MatSlideToggle,
     ConditionTable,
+    FrenTable,
   ],
   selector: 'app-chalet',
   styleUrl: './chalet-dashboard.scss',
@@ -72,34 +75,22 @@ export class ChaletDashboard {
     });
   }
 
-  updateDescription(description: FrEn | undefined): void {
-    this.chalet.update((chalet) => ({...chalet, description}));
+  private setChalet(chalet: ChaletDto): void {
+    this.chalet.set({...chalet, photos: [...chalet.photos]});
   }
 
-  updateName(event: Event): void {
-    const input = event.target;
-    if (input instanceof HTMLInputElement) {
-      this.chalet.update((chalet) => ({...chalet, nom: input.value}));
+  update<K extends keyof ChaletDto>(
+    field: K,
+    value: ChaletDto[K],
+  ): void {
+    if (
+      Array.isArray(value) &&
+      value.length === 0 &&
+      this.chalet()[field] === undefined
+    ) {
+      return;
     }
-  }
-
-  updateNombrePersonnesBase(event: Event): void {
-    const input = event.target;
-    if (input instanceof HTMLInputElement) {
-      const nombrePersonnesBase = input.value === '' ? undefined : input.valueAsNumber;
-      this.chalet.update((chalet) => ({...chalet, nombrePersonnesBase}));
-    }
-  }
-
-  updateAnimauxAutorises(event: MatSlideToggleChange): void {
-    this.chalet.update((chalet) => ({...chalet, animauxAutorises: event.checked}));
-  }
-
-  updateAnimals(animaux: ConditionDto[] | undefined): void {
-    this.chalet.update((chalet) => ({
-      ...chalet,
-      animaux: chalet.animaux === undefined && animaux?.length === 0 ? undefined : animaux,
-    }));
+    updateField(this.chalet, field, value);
   }
 
   save(): void {
@@ -134,6 +125,27 @@ export class ChaletDashboard {
       },
     });
   }
+
+  // general
+
+  updateName(event: Event): void {
+    const input = event.target;
+    if (input instanceof HTMLInputElement) {
+      this.update('nom', input.value);
+    }
+  }
+
+  updateNombrePersonnesBase(event: Event): void {
+    const input = event.target;
+    if (input instanceof HTMLInputElement) {
+      const nombrePersonnesBase = input.value === '' ? undefined : input.valueAsNumber;
+      this.update('nombrePersonnesBase', nombrePersonnesBase);
+    }
+  }
+
+  // description
+
+  // gallery
 
   addPhoto(url: string): Observable<unknown> {
     const photo: CreatePhotoDto = {url, thumbnailUrl: url};
@@ -193,10 +205,6 @@ export class ChaletDashboard {
     return this.chaletService.chaletControllerDeletePhoto(photo.id);
   }
 
-  private setChalet(chalet: ChaletDto): void {
-    this.chalet.set({...chalet, photos: [...chalet.photos]});
-  }
-
   private showPhotoError(error: { error?: { message?: string } }): void {
     this.saving = false;
     this.snackBar.open(
@@ -205,4 +213,7 @@ export class ChaletDashboard {
       {duration: 10000, panelClass: ['red-snackbar']},
     );
   }
+
+  // pets
+
 }
