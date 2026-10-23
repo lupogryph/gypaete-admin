@@ -1,42 +1,43 @@
 <table
   mat-table
-  [dataSource]="conditionsArray.controls"
-  class="condition-table"
+  [dataSource]="formArray.controls"
+  class="table"
 >
   <ng-container matColumnDef="condition">
     <th mat-header-cell *matHeaderCellDef>Condition</th>
-    <td mat-cell *matCellDef="let row" [formGroup]="row">
-      <div class="condition-cell">
-        <div class="condition-fields" formGroupName="condition">
+    <td mat-cell *matCellDef="let row" [formGroup]="row" class="cell">
+      <div formGroupName="condition" class="fields">
+        <mat-form-field appearance="outline">
+          <mat-label>Français</mat-label>
+          <input matInput formControlName="fr"/>
+        </mat-form-field>
+        @if (row.controls.condition.controls.hasEnglish.value) {
           <mat-form-field appearance="outline">
-            <mat-label>Français</mat-label>
-            <input matInput formControlName="fr"/>
+            <mat-label>Anglais</mat-label>
+            <input matInput formControlName="en"/>
           </mat-form-field>
-          @if (row.controls.hasEnglish.value) {
-            <mat-form-field appearance="outline">
-              <mat-label>Anglais</mat-label>
-              <input matInput formControlName="en"/>
-            </mat-form-field>
-          }
-        </div>
-        <button
-          type="button"
-          matIconButton
-          (click)="addEn(row)"
-          [disabled]="row.controls.translating.value"
-          color="primary"
-        ><mat-icon>translate</mat-icon>
-        </button>
-        @if (row.controls.hasEnglish.value) {
-          <button
-            type="button"
-            mat-icon-button
-            (click)="deleteEn(row)"
-          ><mat-icon>subtitles_off</mat-icon></button>
         }
       </div>
-      @if (row.controls.translationError.value) {
-        <p role="alert">{{ row.controls.translationError.value }}</p>
+      <button
+        type="button"
+        matIconButton
+        (click)="addEn(row)"
+        [disabled]="row.controls.condition.controls.translating.value"
+        color="primary"
+      >
+        <mat-icon>translate</mat-icon>
+      </button>
+      @if (row.controls.condition.controls.hasEnglish.value) {
+        <button
+          type="button"
+          mat-icon-button
+          (click)="deleteEn(row)"
+        >
+          <mat-icon>subtitles_off</mat-icon>
+        </button>
+      }
+      @if (row.controls.condition.controls.translationError.value) {
+        <p role="alert">{{ row.controls.condition.controls.translationError.value }}</p>
       }
     </td>
   </ng-container>
@@ -45,8 +46,8 @@
     <th mat-header-cell *matHeaderCellDef>Coût</th>
     <td mat-cell *matCellDef="let row" [formGroup]="row">
       <mat-form-field appearance="outline">
-        <mat-label>Coût</mat-label>
-        <input matInput type="number" formControlName="cout"/>
+        <input matInput type="number" formControlName="cout" class="right-align"/>
+        <span matTextSuffix>&nbsp;€</span>
       </mat-form-field>
     </td>
   </ng-container>
@@ -55,11 +56,10 @@
     <th mat-header-cell *matHeaderCellDef>Par</th>
     <td mat-cell *matCellDef="let row" [formGroup]="row">
       <mat-form-field appearance="outline">
-        <mat-label>Périodicité</mat-label>
         <mat-select formControlName="par">
           <mat-option value="">Aucune</mat-option>
           @for (period of temporalites; track period) {
-            <mat-option [value]="period">{{ period }}</mat-option>
+            <mat-option [value]="period">/ {{ period }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -88,7 +88,7 @@
   </ng-container>
 
   <ng-container matColumnDef="add">
-    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+    <td mat-footer-cell *matFooterCellDef [attr.colspan]="columns.length">
       <button mat-stroked-button type="button" (click)="add()">
         <mat-icon>add</mat-icon>
         Ajouter
@@ -96,7 +96,7 @@
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns"></tr>
   <tr mat-footer-row *matFooterRowDef="['add']"></tr>
 </table>

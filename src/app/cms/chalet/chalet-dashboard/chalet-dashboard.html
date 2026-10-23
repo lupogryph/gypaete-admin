@@ -1,8 +1,6 @@
 <mat-toolbar class="toolbar">
-  <span class="title">Chalet</span>
   <button
-    mat-flat-button
-    class="save-button"
+    matButton="outlined"
     type="button"
     [disabled]="saving"
     (click)="save()"
@@ -41,9 +39,9 @@
               (input)="update('nom', inputNom.value)"
               autocomplete="off"
             />
+            <mat-icon matPrefix>other_houses</mat-icon>
           </mat-form-field>
         </section>
-        <div class="separation"></div>
         <section class="form-section">
           <mat-form-field appearance="outline" class="field">
             <mat-label>Nombre de personnes de base</mat-label>
@@ -54,56 +52,52 @@
               [value]="chalet().nombrePersonnesBase ?? ''"
               (input)="update('nombrePersonnesBase', inputNombrePersonnesBase.valueAsNumber)"
             />
+            <mat-icon matPrefix>group</mat-icon>
           </mat-form-field>
         </section>
       }
-
       @case ('description') {
         <app-description-form
           [description]="chalet().description"
           (descriptionChange)="update('description', $event)"
         ></app-description-form>
       }
-
       @case ('gallery') {
+        <app-storage-status [refreshKey]="storageRefreshKey()"></app-storage-status>
         <app-gallery
           [photos]="chalet().photos"
           (uploadRequested)="uploadPhotos($event)"
           (deletePhotos)="deletePhotos($event)"
         ></app-gallery>
       }
-
       @case ('pets') {
-        <section class="form-section">
-          <mat-slide-toggle
-            [checked]="chalet().animauxAutorises ?? false"
-            (change)="update('animauxAutorises', $event.checked)"
-          >
-            <mat-icon>pets</mat-icon>
-            Animaux autorisés
-          </mat-slide-toggle>
-        </section>
+        <mat-slide-toggle
+          [checked]="chalet().animauxAutorises ?? false"
+          (change)="update('animauxAutorises', $event.checked)"
+        >Animaux autorisés</mat-slide-toggle>
+        <p></p>
         <app-condition-table
           [conditions]="chalet().animaux ?? []"
           (conditionsChange)="update('animaux', $event)"
         ></app-condition-table>
       }
-
       @case ('services') {
         <app-fren-table
           [frens]="chalet().prestations ?? []"
           (frensChange)="update('prestations', $event)"
         ></app-fren-table>
       }
-
       @case ('paid-services') {
         <app-prestation-payante-table
           [prestations]="chalet().prestationsPayantes ?? []"
           (prestationsChange)="update('prestationsPayantes', $event)"
         ></app-prestation-payante-table>
       }
-
       @case ('tarifs') {
+        <app-chalet-period-table
+          [periodes]="chalet().periodes ?? []"
+          (periodesChange)="update('periodes', $event)"
+        ></app-chalet-period-table>
       }
 
     }
