@@ -2,7 +2,7 @@ import {Component, effect, model, untracked, ViewChild} from '@angular/core';
 import {FormArray, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatFormField, MatInput, MatLabel, MatSuffix} from '@angular/material/input';
 import {MatSelect, MatOption} from '@angular/material/select';
 import {MatTable, MatTableModule} from '@angular/material/table';
 import {ConditionDto, Temporalite} from '../../../../../openapi';
@@ -23,6 +23,7 @@ type ConditionForm = FormGroup<FrEnConditionControls>;
     MatTableModule,
     ReactiveFormsModule,
     MatIconButton,
+    MatSuffix,
   ],
   selector: 'app-condition-table',
   styleUrl: './condition-table.scss',

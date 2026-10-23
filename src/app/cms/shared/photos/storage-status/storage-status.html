@@ -1,0 +1,18 @@
+@if (space()) {
+  <div class="storage-status">
+    <div class="status">
+      <span>Espace utilisé : {{ usedPercentage() }} %</span>
+      <span class="spacer"></span>
+      <span>{{ space()?.used | fileSize }}/{{ space()?.total | fileSize }}</span>
+    </div>
+    <mat-progress-bar
+      mode="determinate"
+      [value]="usedPercentage()"
+      [attr.aria-label]="'Espace utilisé : ' + usedPercentage() + ' % test     (' + space()?.used + ' / ' + space()?.total + ')'"
+    ></mat-progress-bar>
+  </div>
+} @else if (error(); as message) {
+  <p role="alert">{{ message }}</p>
+} @else {
+  <p>Chargement de l’espace de stockage...</p>
+}

@@ -232,6 +232,15 @@ section {
   }
 }
 
+input.right-align {
+  text-align: right;
+}
+
+input.right-align::-webkit-outer-spin-button,
+input.right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
 .mat-mdc-snack-bar-container {
   &.red-snackbar {
     --mdc-snackbar-container-color: #941818;

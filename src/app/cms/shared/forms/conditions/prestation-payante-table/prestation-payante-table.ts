@@ -2,7 +2,7 @@ import {Component, effect, inject, model, untracked, ViewChild} from '@angular/c
 import {FormArray, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatFormField, MatInput, MatLabel, MatSuffix} from '@angular/material/input';
 import {MatSelect, MatOption} from '@angular/material/select';
 import {MatTable, MatTableModule} from '@angular/material/table';
 import {PrestationPayanteDto, Temporalite} from '../../../../../openapi';
@@ -31,6 +31,7 @@ type PresationPayanteForm = FormGroup<PresationPayanteControls>;
     ReactiveFormsModule,
     MatIconButton,
     MatCheckbox,
+    MatSuffix,
   ],
   selector: 'app-prestation-payante-table',
   styleUrl: './prestation-payante-table.scss',

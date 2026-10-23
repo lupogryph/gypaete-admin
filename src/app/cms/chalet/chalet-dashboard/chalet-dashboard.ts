@@ -11,13 +11,14 @@ import {Gallery} from '../../shared/photos/gallery/gallery';
 import {PhotoUploadRequest} from '../../shared/photos/photo-upload-dialog/photo-upload-dialog';
 import {Observable, defaultIfEmpty, forkJoin} from 'rxjs';
 import {finalize, switchMap} from 'rxjs/operators';
-import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatFormField, MatInput, MatLabel, MatPrefix} from '@angular/material/input';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {ConditionTable} from '../../shared/forms/conditions/condition-table/condition-table';
 import {FrenTable} from '../../shared/forms/fren-table/fren-table';
 import {updateField} from '../../shared/utils/update-field';
 import {PrestationPayanteTable} from '../../shared/forms/conditions/prestation-payante-table/prestation-payante-table';
 import {ChaletPeriodTable} from '../chalet-period-table/chalet-period-table';
+import {StorageStatus} from '../../shared/photos/storage-status/storage-status';
 
 const dashList = [
   {id: 'general', label: 'General', icon: 'home'},
@@ -50,6 +51,8 @@ type DashboardSection = (typeof dashList)[number]['id'];
     FrenTable,
     PrestationPayanteTable,
     ChaletPeriodTable,
+    StorageStatus,
+    MatPrefix,
   ],
   selector: 'app-chalet',
   styleUrl: './chalet-dashboard.scss',
@@ -64,6 +67,7 @@ export class ChaletDashboard {
   });
 
   readonly dashList = dashList;
+  readonly storageRefreshKey = signal(0);
 
   activeSection: DashboardSection = 'general';
 
@@ -151,6 +155,7 @@ export class ChaletDashboard {
         switchMap(() => this.chaletService.chaletControllerFind()),
         finalize(() => {
           this.saving = false;
+          this.storageRefreshKey.update((key) => key + 1);
         }),
       )
       .subscribe({
@@ -169,6 +174,7 @@ export class ChaletDashboard {
         switchMap(() => this.chaletService.chaletControllerFind()),
         finalize(() => {
           this.saving = false;
+          this.storageRefreshKey.update((key) => key + 1);
         }),
       )
       .subscribe({
