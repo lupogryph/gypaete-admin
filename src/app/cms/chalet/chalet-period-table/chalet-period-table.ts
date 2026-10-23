@@ -13,9 +13,10 @@ import {
   MatRowDef,
   MatTable
 } from '@angular/material/table';
-import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 import {MatIcon} from '@angular/material/icon';
-import {MatNativeDateModule, MatOption} from '@angular/material/core';
+import {MatNativeDateModule, MatOption, provideNativeDateAdapter} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelect} from '@angular/material/select';
 import {PeriodeDto, Temporalite} from '../../../openapi';
@@ -36,15 +37,14 @@ type PeriodeForm = FormGroup<PeriodeControls>;
     MatCellDef,
     MatColumnDef,
     MatDatepickerModule,
-    MatFormField,
+    MatFormFieldModule,
     MatHeaderCell,
     MatHeaderCellDef,
     MatHeaderRow,
     MatHeaderRowDef,
     MatIcon,
     MatIconButton,
-    MatInput,
-    MatLabel,
+    MatInputModule,
     MatNativeDateModule,
     MatOption,
     MatRow,
@@ -57,6 +57,7 @@ type PeriodeForm = FormGroup<PeriodeControls>;
     MatFooterRowDef,
     MatFooterCellDef
   ],
+  providers: [provideNativeDateAdapter()],
   selector: 'app-chalet-period-table',
   styleUrl: './chalet-period-table.scss',
   templateUrl: './chalet-period-table.html',

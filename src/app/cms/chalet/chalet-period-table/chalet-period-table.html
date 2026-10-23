@@ -12,9 +12,7 @@
           <input matStartDate formControlName="debut" placeholder="Date début" required />
           <input matEndDate formControlName="fin" placeholder="Date fin" required />
         </mat-date-range-input>
-        <mat-datepicker-toggle matIconSuffix [for]="periodePicker">
-          <mat-icon matDatepickerToggleIcon>calendar_month</mat-icon>
-        </mat-datepicker-toggle>
+        <mat-datepicker-toggle matIconSuffix [for]="periodePicker"></mat-datepicker-toggle>
         <mat-date-range-picker #periodePicker></mat-date-range-picker>
       </mat-form-field>
     </td>
