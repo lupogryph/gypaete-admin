@@ -42,7 +42,6 @@
             <mat-icon matPrefix>other_houses</mat-icon>
           </mat-form-field>
         </section>
-        <div class="separation"></div>
         <section class="form-section">
           <mat-form-field appearance="outline" class="field">
             <mat-label>Nombre de personnes de base</mat-label>
@@ -75,10 +74,8 @@
         <mat-slide-toggle
           [checked]="chalet().animauxAutorises ?? false"
           (change)="update('animauxAutorises', $event.checked)"
-        >
-          <mat-icon>pets</mat-icon>
-          Animaux autorisés
-        </mat-slide-toggle>
+        >Animaux autorisés</mat-slide-toggle>
+        <p></p>
         <app-condition-table
           [conditions]="chalet().animaux ?? []"
           (conditionsChange)="update('animaux', $event)"
