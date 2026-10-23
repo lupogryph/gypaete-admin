@@ -177,6 +177,11 @@ section {
     gap: 12px;
   }
 
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   .fields {
     display: flex;
     flex: 1;
