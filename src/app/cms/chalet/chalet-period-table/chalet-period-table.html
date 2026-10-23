@@ -1,0 +1,73 @@
+<table
+  mat-table
+  [dataSource]="formArray.controls"
+  class="table"
+>
+  <ng-container matColumnDef="periode">
+    <th mat-header-cell *matHeaderCellDef>Période</th>
+    <td mat-cell *matCellDef="let row" [formGroup]="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Période</mat-label>
+        <mat-date-range-input [rangePicker]="periodePicker">
+          <input matStartDate formControlName="debut" placeholder="Date début" required/>
+          <input matEndDate formControlName="fin" placeholder="Date fin" required/>
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="periodePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker #periodePicker></mat-date-range-picker>
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="cout">
+    <th mat-header-cell *matHeaderCellDef>Coût</th>
+    <td mat-cell *matCellDef="let row" [formGroup]="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Coût</mat-label>
+        <input matInput type="number" formControlName="cout" class="right-align"/>
+        <span matTextSuffix>&nbsp;€</span>
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="par">
+    <th mat-header-cell *matHeaderCellDef>Par</th>
+    <td mat-cell *matCellDef="let row" [formGroup]="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Périodicité</mat-label>
+        <mat-select formControlName="par">
+          <mat-option value="">Aucune</mat-option>
+          @for (period of temporalites; track period) {
+            <mat-option [value]="period">/ {{ period }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let row; let i = index">
+      <button
+        matIconButton
+        type="button"
+        [attr.aria-label]="'Supprimer la période ' + (i + 1)"
+        (click)="remove(i)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="add">
+    <td mat-footer-cell *matFooterCellDef [attr.colspan]="columns.length">
+      <button mat-stroked-button type="button" (click)="add()">
+        <mat-icon>add</mat-icon>
+        Ajouter
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns"></tr>
+  <tr mat-footer-row *matFooterRowDef="['add']"></tr>
+</table>

@@ -1,0 +1,19 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+mat-form-field {
+  display: block;
+  width: 100%;
+}
+
+textarea[matInput] {
+  min-height: 200px;
+  resize: vertical;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+}

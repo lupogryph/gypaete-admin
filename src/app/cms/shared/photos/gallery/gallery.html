@@ -1,0 +1,34 @@
+<div class="gallery">
+  <button
+    class="add-photo-tile"
+    type="button"
+    aria-label="Ajouter une photo"
+    (click)="openUploadDialog()"
+  >
+    <mat-icon>add_a_photo</mat-icon>
+    <span>Ajouter une photo</span>
+  </button>
+  @for (photo of photos(); track photo.id; let i = $index) {
+    <button
+      class="photo-tile"
+      type="button"
+      [class.selected]="isSelected(photo)"
+      [attr.aria-pressed]="isSelected(photo)"
+      [attr.aria-label]="'Sélectionner la photo ' + (i + 1)"
+      (click)="toggleSelection(photo)"
+    >
+      <img class="gallery-image" [src]="photo.thumbnailUrl || photo.url" [alt]="'Photo ' + (i + 1)" />
+    </button>
+  }
+  @if (selection().length > 0) {
+    <button
+      mat-fab
+      class="delete-fab"
+      type="button"
+      [attr.aria-label]="'Supprimer ' + selection().length + ' photo(s) sélectionnée(s)'"
+      (click)="deleteSelectedPhotos()"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+  }
+</div>

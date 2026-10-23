@@ -1,0 +1,34 @@
+<mat-list class="dash-navigation">
+  <mat-list-item
+    matRipple
+    [class.selected]="selected(null)"
+    (click)="select(null)"
+  >
+    <mat-icon matListItemIcon>account_circle</mat-icon>
+    <div matListItemTitle>Moi ({{ me().email }})</div>
+  </mat-list-item>
+
+  @for (user of users(); track user.id; let i = $index) {
+    <mat-divider></mat-divider>
+    <mat-list-item
+      matRipple
+      [class.selected]="selected(i)"
+      (click)="select(i)"
+    >
+      <mat-icon matListItemIcon>
+        {{ user.role === Role.Admin ? 'admin_panel_settings' : 'person' }}
+      </mat-icon>
+      <div matListItemTitle>{{ user.email }}</div>
+    </mat-list-item>
+  }
+
+  <mat-divider></mat-divider>
+  <mat-list-item
+    matRipple
+    [class.selected]="selected(-1)"
+    (click)="add.emit()"
+  >
+    <mat-icon matListItemIcon>add</mat-icon>
+    <div matListItemTitle>Ajouter un utilisateur</div>
+  </mat-list-item>
+</mat-list>

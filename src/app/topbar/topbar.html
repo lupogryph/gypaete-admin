@@ -1,21 +1,33 @@
 @if (user()) {
-<mat-toolbar>
-  <button [routerLink]="['/dashboard']" mat-icon-button><mat-icon>apps</mat-icon></button>
-  <span>Gypaete | admin</span>
-  <span class="spacer"></span>
-  <span>{{user()?.firstName}} {{user()?.name}}</span>
-  <button mat-icon-button class="" aria-label="" [matMenuTriggerFor]="userMenu">
-    <mat-icon>person</mat-icon>
-  </button>
-  <mat-menu #userMenu="matMenu">
-    <button [routerLink]="['/profile']" mat-menu-item>
-      <mat-icon>account_circle</mat-icon>
-      <span>Profil</span>
+  <mat-toolbar>
+<!--    <img ngSrc="../../assets/gypaete-draw-sd.png" height="50" width="150" alt="Gypaete">-->
+    <img ngSrc="https://chalet-gypaete.fr/assets/img/gypaete-draw-sd.png" height="50" width="162" alt="Gypaete">
+    @for (route of routeList; track route.id) {
+      <a
+        mat-button
+        routerLink="/{{ route.id }}"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}"
+        ariaCurrentWhenActive="page"
+      >
+        <mat-icon aria-hidden="true">{{ route.icon }}</mat-icon>
+        <span>{{ route.label }}</span>
+      </a>
+    }
+    <span class="spacer"></span>
+    <span>{{ user()?.firstName }} {{ user()?.name }}</span>
+    <button mat-icon-button class="" aria-label="" [matMenuTriggerFor]="userMenu">
+      <mat-icon>person</mat-icon>
     </button>
-    <button mat-menu-item (click)="logout()">
-      <mat-icon>logout</mat-icon>
-      <span>Déconnection</span>
-    </button>
-  </mat-menu>
-</mat-toolbar>
+    <mat-menu #userMenu="matMenu">
+      <button [routerLink]="['/profile']" mat-menu-item>
+        <mat-icon>account_circle</mat-icon>
+        <span>Profil</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Déconnection</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
 }

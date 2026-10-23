@@ -1,0 +1,37 @@
+<mat-toolbar class="toolbar">
+  <span class="title">Utilisateurs</span>
+</mat-toolbar>
+
+<div class="dash-layout">
+@if (user(); as currentUser) {
+  @if (currentUser.role === Role.Admin) {
+      <div class="dash-navigation">
+        <app-users-list
+          [me]="currentUser"
+          [users]="users()"
+          [cursor]="cursor"
+          (cursorChange)="select($event)"
+          (add)="add()"
+        />
+      </div>
+
+      <section class="dash-content sm">
+        @if (creatingUser) {
+          <app-user-form
+            [admin]="true"
+            [isNew]="true"
+            (save)="save($event)"
+          />
+        } @else if (selectedUser; as selected) {
+          <app-user-form
+            [user]="selected"
+            [admin]="true"
+            [canDelete]="cursor !== null"
+            (save)="save($event)"
+            (delete)="deleteSelected()"
+          />
+        }
+      </section>
+  }
+}
+</div>
