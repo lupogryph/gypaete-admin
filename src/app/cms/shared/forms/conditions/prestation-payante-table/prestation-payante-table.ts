@@ -6,21 +6,17 @@ import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatSelect, MatOption} from '@angular/material/select';
 import {MatTable, MatTableModule} from '@angular/material/table';
 import {PrestationPayanteDto, Temporalite} from '../../../../../openapi';
-import {TranslationService} from '../../../../../core/translation/translation.service';
 import {MatCheckbox} from '@angular/material/checkbox';
+import {FrEnConditionControls} from '../../utils/fren-control';
+import {FrenFormService} from '../../utils/fren-form-service';
 
-type PresationPayanteForm = FormGroup<{
-  condition: FormGroup<{
-    fr: FormControl<string>;
-    en: FormControl<string>;
-  }>;
+interface PresationPayanteControls extends FrEnConditionControls {
   cout: FormControl<number>;
   par: FormControl<Temporalite | ''>;
   parPersonne: FormControl<boolean>;
-  hasEnglish: FormControl<boolean>;
-  translating: FormControl<boolean>;
-  translationError: FormControl<string>;
-}>;
+}
+
+type PresationPayanteForm = FormGroup<PresationPayanteControls>;
 
 @Component({
   imports: [
@@ -45,11 +41,11 @@ export class PrestationPayanteTable {
 
   @ViewChild(MatTable) private table?: MatTable<PresationPayanteForm>;
 
-  readonly displayedColumns = ['condition', 'cout', 'par', 'parPersonne', 'actions'];
+  readonly columns = ['condition', 'cout', 'par', 'parPersonne', 'actions'];
   readonly temporalites = Object.values(Temporalite);
-  readonly conditionsArray = new FormArray<PresationPayanteForm>([]);
+  readonly formArray = new FormArray<PresationPayanteForm>([]);
 
-  constructor(private readonly translationService: TranslationService) {
+  constructor(private readonly frenFormService: FrenFormService) {
     effect(() => {
       const conditions = this.prestations();
       untracked(() => {
@@ -59,47 +55,27 @@ export class PrestationPayanteTable {
       });
     });
 
-    this.conditionsArray.valueChanges.subscribe(() => {
+    this.formArray.valueChanges.subscribe(() => {
       this.prestations.set(this.formValue());
     });
   }
 
   add(): void {
-    this.conditionsArray.push(this.createForm());
+    this.formArray.push(this.createForm());
     this.table?.renderRows();
   }
 
   remove(i: number): void {
-    this.conditionsArray.removeAt(i);
+    this.formArray.removeAt(i);
     this.table?.renderRows();
   }
 
   async addEn(form: PresationPayanteForm): Promise<void> {
-    const {fr, en} = form.controls.condition.controls;
-    const sourceText = fr.value;
-    form.controls.hasEnglish.setValue(true);
-    form.controls.translationError.setValue('');
-
-    if (!sourceText.trim()) {
-      return;
-    }
-
-    form.controls.translating.setValue(true);
-    try {
-      en.setValue(await this.translationService.translate(sourceText, 'fr', 'en'));
-    } catch (error: unknown) {
-      const reason = error instanceof Error ? ` (${error.message})` : '';
-      form.controls.translationError.setValue(
-        `La traduction a échoué${reason}. Vous pouvez saisir le texte anglais manuellement.`,
-      );
-    } finally {
-      form.controls.translating.setValue(false);
-    }
+    this.frenFormService.addEn(form.controls.condition.controls);
   }
 
   deleteEn(form: PresationPayanteForm) {
-    form.controls.condition.controls.en.setValue('');
-    form.controls.hasEnglish.setValue(false);
+    this.frenFormService.deleteEn(form.controls.condition.controls);
   }
 
   private createForm(dto?: PrestationPayanteDto): PresationPayanteForm {
@@ -107,19 +83,19 @@ export class PrestationPayanteTable {
       condition: new FormGroup({
         fr: new FormControl(dto?.condition.fr ?? '', {nonNullable: true}),
         en: new FormControl(dto?.condition.en ?? '', {nonNullable: true}),
+        hasEnglish: new FormControl(dto?.condition.en !== undefined, {nonNullable: true}),
+        translating: new FormControl(false, {nonNullable: true}),
+        translationError: new FormControl('', {nonNullable: true}),
       }),
       cout: new FormControl(dto?.cout ?? 0, {nonNullable: true}),
       par: new FormControl(dto?.par ?? '', {nonNullable: true}),
       parPersonne: new FormControl(dto?.parPersonne ?? false, {nonNullable: true}),
-      hasEnglish: new FormControl(dto?.condition.en !== undefined, {nonNullable: true}),
-      translating: new FormControl(false, {nonNullable: true}),
-      translationError: new FormControl('', {nonNullable: true}),
     });
   }
 
   private setConditions(dtos: PrestationPayanteDto[]): void {
-    this.conditionsArray.clear({emitEvent: false});
-    this.conditionsArray.push(
+    this.formArray.clear({emitEvent: false});
+    this.formArray.push(
       dtos.map((condition) => this.createForm(condition)),
       {emitEvent: false},
     );
@@ -127,7 +103,7 @@ export class PrestationPayanteTable {
   }
 
   private formValue(): PrestationPayanteDto[] {
-    return this.conditionsArray.getRawValue().map(({condition, cout, par, parPersonne}) => ({
+    return this.formArray.getRawValue().map(({condition, cout, par, parPersonne}) => ({
       condition: {
         fr: condition.fr,
         ...(condition.en ? {en: condition.en} : {}),

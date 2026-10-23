@@ -1,6 +1,6 @@
 <table
   mat-table
-  [dataSource]="conditionsArray.controls"
+  [dataSource]="formArray.controls"
   class="condition-table"
 >
   <ng-container matColumnDef="condition">
@@ -12,7 +12,7 @@
             <mat-label>Français</mat-label>
             <input matInput formControlName="fr"/>
           </mat-form-field>
-          @if (row.controls.hasEnglish.value) {
+          @if (row.controls.condition.controls.hasEnglish.value) {
             <mat-form-field appearance="outline">
               <mat-label>Anglais</mat-label>
               <input matInput formControlName="en"/>
@@ -23,11 +23,11 @@
           type="button"
           matIconButton
           (click)="addEn(row)"
-          [disabled]="row.controls.translating.value"
+          [disabled]="row.controls.condition.controls.translating.value"
           color="primary"
         ><mat-icon>translate</mat-icon>
         </button>
-        @if (row.controls.hasEnglish.value) {
+        @if (row.controls.condition.controls.hasEnglish.value) {
           <button
             type="button"
             mat-icon-button
@@ -35,8 +35,8 @@
           ><mat-icon>subtitles_off</mat-icon></button>
         }
       </div>
-      @if (row.controls.translationError.value) {
-        <p role="alert">{{ row.controls.translationError.value }}</p>
+      @if (row.controls.condition.controls.translationError.value) {
+        <p role="alert">{{ row.controls.condition.controls.translationError.value }}</p>
       }
     </td>
   </ng-container>
@@ -81,7 +81,7 @@
   </ng-container>
 
   <ng-container matColumnDef="add">
-    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+    <td mat-footer-cell *matFooterCellDef [attr.colspan]="columns.length">
       <button mat-stroked-button type="button" (click)="add()">
         <mat-icon>add</mat-icon>
         Ajouter une condition
@@ -89,7 +89,7 @@
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns"></tr>
   <tr mat-footer-row *matFooterRowDef="['add']"></tr>
 </table>

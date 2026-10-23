@@ -6,14 +6,8 @@ import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatTable, MatTableModule} from '@angular/material/table';
 import {FrEn} from '../../../../openapi';
 import {TranslationService} from '../../../../core/translation/translation.service';
-
-type FrenForm = FormGroup<{
-  fr: FormControl<string>;
-  en: FormControl<string>;
-  hasEnglish: FormControl<boolean>;
-  translating: FormControl<boolean>;
-  translationError: FormControl<string>;
-}>;
+import {createFrEnForm, FrEnForm} from '../utils/fren-control';
+import {FrenFormService} from '../utils/fren-form-service';
 
 @Component({
   imports: [
@@ -33,12 +27,12 @@ type FrenForm = FormGroup<{
 export class FrenTable {
   readonly frens = model<FrEn[]>([]);
 
-  @ViewChild(MatTable) private table?: MatTable<FrenForm>;
+  @ViewChild(MatTable) private table?: MatTable<FrEnForm>;
 
   readonly displayedColumns = ['fren', 'actions'];
-  readonly frensArray = new FormArray<FrenForm>([]);
+  readonly frensArray = new FormArray<FrEnForm>([]);
 
-  constructor(private readonly translationService: TranslationService) {
+  constructor(private readonly frenFormService: FrenFormService) {
     effect(() => {
       const frens = this.frens();
       untracked(() => {
@@ -54,7 +48,7 @@ export class FrenTable {
   }
 
   add(): void {
-    this.frensArray.push(this.createFrenForm());
+    this.frensArray.push(createFrEnForm());
     this.table?.renderRows();
   }
 
@@ -63,49 +57,18 @@ export class FrenTable {
     this.table?.renderRows();
   }
 
-  async addEn(frenForm: FrenForm): Promise<void> {
-    const sourceText = frenForm.controls.fr.value;
-    frenForm.controls.hasEnglish.setValue(true);
-    frenForm.controls.translationError.setValue('');
-
-    if (!sourceText.trim()) {
-      return;
-    }
-
-    frenForm.controls.translating.setValue(true);
-    try {
-      frenForm.controls.en.setValue(
-        await this.translationService.translate(sourceText, 'fr', 'en'),
-      );
-    } catch (error: unknown) {
-      const reason = error instanceof Error ? ` (${error.message})` : '';
-      frenForm.controls.translationError.setValue(
-        `La traduction a échoué${reason}. Vous pouvez saisir le texte anglais manuellement.`,
-      );
-    } finally {
-      frenForm.controls.translating.setValue(false);
-    }
+  async addEn(frenForm: FrEnForm): Promise<void> {
+    this.frenFormService.addEn(frenForm.controls);
   }
 
-  deleteEn(frenForm: FrenForm): void {
-    frenForm.controls.en.setValue('');
-    frenForm.controls.hasEnglish.setValue(false);
-  }
-
-  private createFrenForm(fren?: FrEn): FrenForm {
-    return new FormGroup({
-      fr: new FormControl(fren?.fr ?? '', {nonNullable: true}),
-      en: new FormControl(fren?.en ?? '', {nonNullable: true}),
-      hasEnglish: new FormControl(fren?.en !== undefined, {nonNullable: true}),
-      translating: new FormControl(false, {nonNullable: true}),
-      translationError: new FormControl('', {nonNullable: true}),
-    });
+  deleteEn(frenForm: FrEnForm): void {
+    this.frenFormService.deleteEn(frenForm.controls);
   }
 
   private setFrens(frens: FrEn[]): void {
     this.frensArray.clear({emitEvent: false});
     this.frensArray.push(
-      frens.map((fren) => this.createFrenForm(fren)),
+      frens.map((fren) => createFrEnForm(fren)),
       {emitEvent: false},
     );
     this.table?.renderRows();

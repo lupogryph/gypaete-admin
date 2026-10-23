@@ -6,19 +6,10 @@ import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatSelect, MatOption} from '@angular/material/select';
 import {MatTable, MatTableModule} from '@angular/material/table';
 import {ConditionDto, Temporalite} from '../../../../../openapi';
-import {TranslationService} from '../../../../../core/translation/translation.service';
+import {createFrEnForm, FrEnConditionControls} from '../../utils/fren-control';
+import {FrenFormService} from '../../utils/fren-form-service';
 
-type ConditionForm = FormGroup<{
-  condition: FormGroup<{
-    fr: FormControl<string>;
-    en: FormControl<string>;
-  }>;
-  cout: FormControl<number>;
-  par: FormControl<Temporalite | ''>;
-  hasEnglish: FormControl<boolean>;
-  translating: FormControl<boolean>;
-  translationError: FormControl<string>;
-}>;
+type ConditionForm = FormGroup<FrEnConditionControls>;
 
 @Component({
   imports: [
@@ -42,11 +33,11 @@ export class ConditionTable {
 
   @ViewChild(MatTable) private table?: MatTable<ConditionForm>;
 
-  readonly displayedColumns = ['condition', 'cout', 'par', 'actions'];
+  readonly columns = ['condition', 'cout', 'par', 'actions'];
   readonly temporalites = Object.values(Temporalite);
-  readonly conditionsArray = new FormArray<ConditionForm>([]);
+  readonly formArray = new FormArray<ConditionForm>([]);
 
-  constructor(private readonly translationService: TranslationService) {
+  constructor(private readonly frenFormService: FrenFormService) {
     effect(() => {
       const conditions = this.conditions();
       untracked(() => {
@@ -56,66 +47,40 @@ export class ConditionTable {
       });
     });
 
-    this.conditionsArray.valueChanges.subscribe(() => {
+    this.formArray.valueChanges.subscribe(() => {
       this.conditions.set(this.formValue());
     });
   }
 
   add(): void {
-    this.conditionsArray.push(this.createConditionForm());
+    this.formArray.push(this.createConditionForm());
     this.table?.renderRows();
   }
 
   remove(i: number): void {
-    this.conditionsArray.removeAt(i);
+    this.formArray.removeAt(i);
     this.table?.renderRows();
   }
 
-  async addEn(conditionForm: ConditionForm): Promise<void> {
-    const {fr, en} = conditionForm.controls.condition.controls;
-    const sourceText = fr.value;
-    conditionForm.controls.hasEnglish.setValue(true);
-    conditionForm.controls.translationError.setValue('');
-
-    if (!sourceText.trim()) {
-      return;
-    }
-
-    conditionForm.controls.translating.setValue(true);
-    try {
-      en.setValue(await this.translationService.translate(sourceText, 'fr', 'en'));
-    } catch (error: unknown) {
-      const reason = error instanceof Error ? ` (${error.message})` : '';
-      conditionForm.controls.translationError.setValue(
-        `La traduction a échoué${reason}. Vous pouvez saisir le texte anglais manuellement.`,
-      );
-    } finally {
-      conditionForm.controls.translating.setValue(false);
-    }
+  async addEn(conditionForm: ConditionForm) {
+    await this.frenFormService.addEn(conditionForm.controls.condition.controls);
   }
 
   deleteEn(conditionForm: ConditionForm) {
-    conditionForm.controls.condition.controls.en.setValue('');
-    conditionForm.controls.hasEnglish.setValue(false);
+    this.frenFormService.deleteEn(conditionForm.controls.condition.controls);
   }
 
-  private createConditionForm(condition?: ConditionDto): ConditionForm {
+  private createConditionForm(dto?: ConditionDto): ConditionForm {
     return new FormGroup({
-      condition: new FormGroup({
-        fr: new FormControl(condition?.condition.fr ?? '', {nonNullable: true}),
-        en: new FormControl(condition?.condition.en ?? '', {nonNullable: true}),
-      }),
-      cout: new FormControl(condition?.cout ?? 0, {nonNullable: true}),
-      par: new FormControl(condition?.par ?? '', {nonNullable: true}),
-      hasEnglish: new FormControl(condition?.condition.en !== undefined, {nonNullable: true}),
-      translating: new FormControl(false, {nonNullable: true}),
-      translationError: new FormControl('', {nonNullable: true}),
+      condition: createFrEnForm(dto?.condition),
+      cout: new FormControl(dto?.cout ?? 0, {nonNullable: true}),
+      par: new FormControl(dto?.par ?? '', {nonNullable: true}),
     });
   }
 
   private setConditions(conditions: ConditionDto[]): void {
-    this.conditionsArray.clear({emitEvent: false});
-    this.conditionsArray.push(
+    this.formArray.clear({emitEvent: false});
+    this.formArray.push(
       conditions.map((condition) => this.createConditionForm(condition)),
       {emitEvent: false},
     );
@@ -123,7 +88,7 @@ export class ConditionTable {
   }
 
   private formValue(): ConditionDto[] {
-    return this.conditionsArray.getRawValue().map(({condition, cout, par}) => ({
+    return this.formArray.getRawValue().map(({condition, cout, par}) => ({
       condition: {
         fr: condition.fr,
         ...(condition.en ? {en: condition.en} : {}),

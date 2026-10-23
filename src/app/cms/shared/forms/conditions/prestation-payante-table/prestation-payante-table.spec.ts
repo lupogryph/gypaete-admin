@@ -75,9 +75,9 @@ describe('PrestationPayanteTable', () => {
     fixture.componentRef.setInput('conditions', initialConditions);
     fixture.detectChanges();
 
-    expect(component.conditionsArray.length).toBe(1);
+    expect(component.formArray.length).toBe(1);
 
-    const row = component.conditionsArray.at(0);
+    const row = component.formArray.at(0);
     row.controls.condition.controls.fr.setValue('Déjeuner');
     row.controls.cout.setValue(15);
     expect(component.prestations()).toEqual([
@@ -89,11 +89,11 @@ describe('PrestationPayanteTable', () => {
     ]);
 
     component.add();
-    expect(component.conditionsArray.length).toBe(2);
+    expect(component.formArray.length).toBe(2);
     expect(component.prestations()[1]).toEqual({ condition: { fr: '' }, cout: 0 });
 
     component.remove(0);
-    expect(component.conditionsArray.length).toBe(1);
+    expect(component.formArray.length).toBe(1);
     expect(component.prestations()).toEqual([{ condition: { fr: '' }, cout: 0 }]);
   });
 });
