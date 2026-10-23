@@ -4,8 +4,8 @@ import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatTable, MatTableModule} from '@angular/material/table';
-import {FrEn} from '../../openapi';
-import {TranslationService} from '../../core/translation/translation.service';
+import {FrEn} from '../../../../openapi';
+import {TranslationService} from '../../../../core/translation/translation.service';
 
 type FrenForm = FormGroup<{
   fr: FormControl<string>;

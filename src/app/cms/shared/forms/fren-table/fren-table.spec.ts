@@ -1,5 +1,5 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {TranslationService} from '../../core/translation/translation.service';
+import {TranslationService} from '../../../../core/translation/translation.service';
 import {FrenTable} from './fren-table';
 
 describe('FrenTable', () => {

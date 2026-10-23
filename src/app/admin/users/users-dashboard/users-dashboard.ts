@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit, signal} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {userSignal} from '../../../main';
-import {CreateUserDto, Role, UpdateUserDto, UserDto, UserService} from '../../openapi';
+import {userSignal} from '../../../../main';
+import {CreateUserDto, Role, UpdateUserDto, UserDto, UserService} from '../../../openapi';
 import {UserForm} from '../user-form/user-form';
 import {UsersList} from '../users-list/users-list';
 import {MatButton} from '@angular/material/button';

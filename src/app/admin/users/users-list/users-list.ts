@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, input, output} from '@angular/core';
 import {MatRipple} from '@angular/material/core';
 import {MatDivider, MatList, MatListItem, MatListItemIcon} from '@angular/material/list';
 import {MatIcon} from '@angular/material/icon';
-import {Role, UserDto} from '../../openapi';
+import {Role, UserDto} from '../../../openapi';
 
 @Component({
   selector: 'app-users-list',

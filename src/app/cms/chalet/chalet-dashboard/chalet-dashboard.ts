@@ -5,17 +5,18 @@ import {MatRipple} from '@angular/material/core';
 import {MatList, MatListItem, MatListItemIcon} from '@angular/material/list';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatToolbar} from '@angular/material/toolbar';
-import {DescriptionForm} from '../../shared/description-form/description-form';
-import {ChaletDto, ChaletService, CreatePhotoDto, FrEn, PhotoDto, UpdateChaletDto} from '../../openapi';
+import {DescriptionForm} from '../../shared/forms/description-form/description-form';
+import {ChaletDto, ChaletService, CreatePhotoDto, FrEn, PhotoDto, UpdateChaletDto} from '../../../openapi';
 import {Gallery} from '../../shared/photos/gallery/gallery';
 import {PhotoUploadRequest} from '../../shared/photos/photo-upload-dialog/photo-upload-dialog';
 import {Observable, defaultIfEmpty, forkJoin} from 'rxjs';
 import {finalize, switchMap} from 'rxjs/operators';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {ConditionTable} from '../../shared/condition-table/condition-table';
-import {FrenTable} from '../../shared/fren-table/fren-table';
+import {ConditionTable} from '../../shared/forms/conditions/condition-table/condition-table';
+import {FrenTable} from '../../shared/forms/fren-table/fren-table';
 import {updateField} from '../../shared/utils/update-field';
+import {PrestationPayanteTable} from '../../shared/forms/conditions/prestation-payante-table/prestation-payante-table';
 
 const dashList = [
   {id: 'general', label: 'General', icon: 'home'},
@@ -46,6 +47,7 @@ type DashboardSection = (typeof dashList)[number]['id'];
     MatSlideToggle,
     ConditionTable,
     FrenTable,
+    PrestationPayanteTable,
   ],
   selector: 'app-chalet',
   styleUrl: './chalet-dashboard.scss',

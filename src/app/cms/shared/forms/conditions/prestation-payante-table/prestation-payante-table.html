@@ -1,0 +1,102 @@
+<table
+  mat-table
+  [dataSource]="conditionsArray.controls"
+  class="condition-table"
+>
+  <ng-container matColumnDef="condition">
+    <th mat-header-cell *matHeaderCellDef>Condition</th>
+    <td mat-cell *matCellDef="let row" [formGroup]="row">
+      <div class="condition-cell">
+        <div class="condition-fields" formGroupName="condition">
+          <mat-form-field appearance="outline">
+            <mat-label>Français</mat-label>
+            <input matInput formControlName="fr"/>
+          </mat-form-field>
+          @if (row.controls.hasEnglish.value) {
+            <mat-form-field appearance="outline">
+              <mat-label>Anglais</mat-label>
+              <input matInput formControlName="en"/>
+            </mat-form-field>
+          }
+        </div>
+        <button
+          type="button"
+          matIconButton
+          (click)="addEn(row)"
+          [disabled]="row.controls.translating.value"
+          color="primary"
+        ><mat-icon>translate</mat-icon>
+        </button>
+        @if (row.controls.hasEnglish.value) {
+          <button
+            type="button"
+            mat-icon-button
+            (click)="deleteEn(row)"
+          ><mat-icon>subtitles_off</mat-icon></button>
+        }
+      </div>
+      @if (row.controls.translationError.value) {
+        <p role="alert">{{ row.controls.translationError.value }}</p>
+      }
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="cout">
+    <th mat-header-cell *matHeaderCellDef>Coût</th>
+    <td mat-cell *matCellDef="let row" [formGroup]="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Coût</mat-label>
+        <input matInput type="number" formControlName="cout"/>
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="par">
+    <th mat-header-cell *matHeaderCellDef>Par</th>
+    <td mat-cell *matCellDef="let row" [formGroup]="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Périodicité</mat-label>
+        <mat-select formControlName="par">
+          <mat-option value="">Aucune</mat-option>
+          @for (period of temporalites; track period) {
+            <mat-option [value]="period">{{ period }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="parPersonne">
+    <th mat-header-cell *matHeaderCellDef>Par personne</th>
+    <td mat-cell *matCellDef="let row" [formGroup]="row">
+      <mat-checkbox formControlName="parPersonne" value=""></mat-checkbox>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let row; let i = index">
+      <button
+        matIconButton
+        type="button"
+        [attr.aria-label]="'Supprimer la condition ' + (i + 1)"
+        (click)="remove(i)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="add">
+    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+      <button mat-stroked-button type="button" (click)="add()">
+        <mat-icon>add</mat-icon>
+        Ajouter
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  <tr mat-footer-row *matFooterRowDef="['add']"></tr>
+</table>

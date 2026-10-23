@@ -2,7 +2,7 @@ import {Component, input, output, signal} from '@angular/core';
 import {MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatDialog} from '@angular/material/dialog';
-import {PhotoDto} from '../../../openapi';
+import {PhotoDto} from '../../../../openapi';
 import {PhotoUploadDialog, PhotoUploadRequest} from '../photo-upload-dialog/photo-upload-dialog';
 
 @Component({

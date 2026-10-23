@@ -1,9 +1,9 @@
 import {Routes} from '@angular/router';
 import {Login} from './login/login';
-import {ChaletDashboard} from './chalet/chalet-dashboard/./chalet-dashboard';
-import {Chambres} from './chambres/chambres';
-import {UsersDashboard} from './users/users-dashboard/users-dashboard';
-import {UserProfile} from './users/user-profile/user-profile';
+import {ChaletDashboard} from './cms/chalet/chalet-dashboard/./chalet-dashboard';
+import {Chambres} from './cms/chambres/chambres';
+import {UsersDashboard} from './admin/users/users-dashboard/users-dashboard';
+import {UserProfile} from './admin/users/user-profile/user-profile';
 import {Dashboard} from './dashboard/dashboard';
 
 export const routes: Routes = [

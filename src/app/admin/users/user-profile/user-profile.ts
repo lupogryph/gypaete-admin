@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {userSignal} from '../../../main';
-import {UpdateUserDto, UserService} from '../../openapi';
+import {userSignal} from '../../../../main';
+import {UpdateUserDto, UserService} from '../../../openapi';
 import {UserForm} from '../user-form/user-form';
 
 @Component({

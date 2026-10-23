@@ -6,7 +6,7 @@ import {MatCard, MatCardActions, MatCardContent} from '@angular/material/card';
 import {MatIcon} from '@angular/material/icon';
 import {MatFormField, MatInput, MatLabel, MatPrefix} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
-import {Role, UpdateUserDto, UserDto} from '../../openapi';
+import {Role, UpdateUserDto, UserDto} from '../../../openapi';
 
 interface UserFormModel {
   email: string;

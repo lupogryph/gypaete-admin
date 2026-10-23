@@ -97,6 +97,10 @@
       }
 
       @case ('paid-services') {
+        <app-prestation-payante-table
+          [prestations]="chalet().prestationsPayantes ?? []"
+          (prestationsChange)="update('prestationsPayantes', $event)"
+        ></app-prestation-payante-table>
       }
 
       @case ('tarifs') {

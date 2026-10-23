@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ConditionDto, Temporalite } from '../../openapi';
-import { TranslationService } from '../../core/translation/translation.service';
-import { ConditionTable } from './condition-table';
+import { ConditionDto, Temporalite } from '../../../../../openapi';
+import { TranslationService } from '../../../../../core/translation/translation.service';
+import { PrestationPayanteTable } from './prestation-payante-table';
 
-describe('ConditionTable', () => {
-  let component: ConditionTable;
-  let fixture: ComponentFixture<ConditionTable>;
+describe('PrestationPayanteTable', () => {
+  let component: PrestationPayanteTable;
+  let fixture: ComponentFixture<PrestationPayanteTable>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConditionTable],
+      imports: [PrestationPayanteTable],
       providers: [
         {
           provide: TranslationService,
@@ -19,7 +19,7 @@ describe('ConditionTable', () => {
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(ConditionTable);
+    fixture = TestBed.createComponent(PrestationPayanteTable);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
@@ -57,7 +57,7 @@ describe('ConditionTable', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(component.conditions()).toEqual([
+    expect(component.prestations()).toEqual([
       { condition: { fr: 'Petit-déjeuner', en: 'Breakfast' }, cout: 12 },
       { condition: { fr: 'Dîner' }, cout: 15 },
     ]);
@@ -80,7 +80,7 @@ describe('ConditionTable', () => {
     const row = component.conditionsArray.at(0);
     row.controls.condition.controls.fr.setValue('Déjeuner');
     row.controls.cout.setValue(15);
-    expect(component.conditions()).toEqual([
+    expect(component.prestations()).toEqual([
       {
         condition: { fr: 'Déjeuner', en: 'Breakfast' },
         cout: 15,
@@ -90,10 +90,10 @@ describe('ConditionTable', () => {
 
     component.add();
     expect(component.conditionsArray.length).toBe(2);
-    expect(component.conditions()[1]).toEqual({ condition: { fr: '' }, cout: 0 });
+    expect(component.prestations()[1]).toEqual({ condition: { fr: '' }, cout: 0 });
 
     component.remove(0);
     expect(component.conditionsArray.length).toBe(1);
-    expect(component.conditions()).toEqual([{ condition: { fr: '' }, cout: 0 }]);
+    expect(component.prestations()).toEqual([{ condition: { fr: '' }, cout: 0 }]);
   });
 });

@@ -5,8 +5,8 @@ import {MatIcon} from '@angular/material/icon';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatSelect, MatOption} from '@angular/material/select';
 import {MatTable, MatTableModule} from '@angular/material/table';
-import {ConditionDto, Temporalite} from '../../openapi';
-import {TranslationService} from '../../core/translation/translation.service';
+import {ConditionDto, Temporalite} from '../../../../../openapi';
+import {TranslationService} from '../../../../../core/translation/translation.service';
 
 type ConditionForm = FormGroup<{
   condition: FormGroup<{
