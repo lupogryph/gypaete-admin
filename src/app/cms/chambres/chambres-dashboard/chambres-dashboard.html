@@ -19,6 +19,16 @@
     <mat-icon>save</mat-icon>
     Sauvegarder
   </button>
+  <span class="spacer"></span>
+  <button
+    matButton="outlined"
+    type="button"
+    [disabled]="disabledDelete()"
+    (click)="delete()"
+  >
+    <mat-icon>{{ pendingDeleteNumero() === selectedChambre() ? 'warning' : 'delete' }}</mat-icon>
+    {{ pendingDeleteNumero() === selectedChambre() ? 'Confirmer la suppression' : 'Supprimer' }}
+  </button>
 
   {{ selectedChambre() }}
 </mat-toolbar>
