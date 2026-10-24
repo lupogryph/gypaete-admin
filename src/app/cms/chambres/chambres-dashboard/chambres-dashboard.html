@@ -23,4 +23,6 @@
   {{ selectedChambre() }}
 </mat-toolbar>
 
-<app-chambre-dashboard [numero]="selectedChambre()"></app-chambre-dashboard>
+@if (selectedChambre() > -2) {
+  <app-chambre-dashboard [numero]="selectedChambre()"></app-chambre-dashboard>
+}

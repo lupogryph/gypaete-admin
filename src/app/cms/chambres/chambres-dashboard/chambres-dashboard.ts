@@ -29,7 +29,7 @@ export class ChambresDashboard {
   readonly snackBar = inject(MatSnackBar);
 
   readonly chambres = signal<ChambreDto[]>([]);
-  readonly selectedChambre = signal<number>(0);
+  readonly selectedChambre = signal<number>(this.chambres().length > 0 ? 0 : -2);
 
   saving = false;
 
