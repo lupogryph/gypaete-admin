@@ -94,6 +94,12 @@
           (conditionsChange)="update('animaux', $event)"
         ></app-condition-table>
       }
+      @case ('paid-services') {
+        <app-prestation-payante-table
+          [prestations]="chambre().prestationsPayantes ?? []"
+          (prestationsChange)="update('prestationsPayantes', $event)"
+        ></app-prestation-payante-table>
+      }
 
     }
   </section>

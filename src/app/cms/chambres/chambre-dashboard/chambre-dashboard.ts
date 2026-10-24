@@ -1,9 +1,7 @@
 import {Component, inject, input, output, signal} from '@angular/core';
-import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatRipple} from '@angular/material/core';
 import {MatList, MatListItem, MatListItemIcon} from '@angular/material/list';
-import {MatToolbar} from '@angular/material/toolbar';
 import {ChambreDto, ChambresService, CreateChambreDto, CreatePhotoDto, PhotoDto} from '../../../openapi';
 import {Gallery} from '../../shared/photos/gallery/gallery';
 import {PhotoUploadRequest} from '../../shared/photos/photo-upload-dialog/photo-upload-dialog';
@@ -12,7 +10,6 @@ import {finalize, switchMap} from 'rxjs/operators';
 import {MatFormField, MatInput, MatLabel, MatPrefix} from '@angular/material/input';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {ConditionTable} from '../../shared/forms/conditions/condition-table/condition-table';
-import {FrenTable} from '../../shared/forms/fren-table/fren-table';
 import {updateField} from '../../shared/utils/update-field';
 import {PrestationPayanteTable} from '../../shared/forms/conditions/prestation-payante-table/prestation-payante-table';
 import {StorageStatus} from '../../shared/photos/storage-status/storage-status';
@@ -22,6 +19,7 @@ const dashList = [
   {id: 'general', label: 'General', icon: 'home'},
   {id: 'gallery', label: 'Gallerie', icon: 'photo_library'},
   {id: 'pets', label: 'Animaux', icon: 'pets'},
+  {id: 'paid-services', label: 'Prestations Payantes', icon: 'payments'},
   {id: 'tarifs', label: 'Tarifs', icon: 'price_change'},
 ] as const;
 
@@ -29,20 +27,17 @@ type DashboardSection = (typeof dashList)[number]['id'];
 
 @Component({
   imports: [
-    MatButton,
     MatIcon,
     MatRipple,
     MatList,
     MatListItem,
     MatListItemIcon,
-    MatToolbar,
     Gallery,
     MatFormField,
     MatInput,
     MatLabel,
     MatSlideToggle,
     ConditionTable,
-    FrenTable,
     PrestationPayanteTable,
     StorageStatus,
     MatPrefix,
