@@ -29,8 +29,6 @@
     <mat-icon>{{ pendingDeleteNumero() === selectedChambre() ? 'warning' : 'delete' }}</mat-icon>
     {{ pendingDeleteNumero() === selectedChambre() ? 'Confirmer la suppression' : 'Supprimer' }}
   </button>
-
-  {{ selectedChambre() }}
 </mat-toolbar>
 
 @if (selectedChambre() > -2) {
