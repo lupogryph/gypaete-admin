@@ -19,7 +19,7 @@
       @case ('general') {
         <section class="form-section">
           <mat-form-field appearance="outline" class="field">
-            <mat-label>Nom du chalet</mat-label>
+            <mat-label>Nom</mat-label>
             <input
               #inputNom
               matInput
@@ -32,7 +32,20 @@
         </section>
         <section class="form-section">
           <mat-form-field appearance="outline" class="field">
-            <mat-label>Nombre de personnes de base</mat-label>
+            <mat-label>Nombre de personnes</mat-label>
+            <input
+              #mombrePersonnes
+              matInput
+              type="number"
+              [value]="chambre().mombrePersonnes ?? ''"
+              (input)="update('mombrePersonnes', mombrePersonnes.valueAsNumber)"
+            />
+            <mat-icon matPrefix>group</mat-icon>
+          </mat-form-field>
+        </section>
+        <section class="form-section">
+          <mat-form-field appearance="outline" class="field">
+            <mat-label>Nombre de personnes max</mat-label>
             <input
               #mombrePersonnesMax
               matInput

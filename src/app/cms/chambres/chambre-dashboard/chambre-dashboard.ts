@@ -1,4 +1,4 @@
-import {Component, inject, input, model, signal} from '@angular/core';
+import {Component, inject, input, output, signal} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatRipple} from '@angular/material/core';
@@ -20,11 +20,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 
 const dashList = [
   {id: 'general', label: 'General', icon: 'home'},
-  {id: 'description', label: 'Description', icon: 'description'},
   {id: 'gallery', label: 'Gallerie', icon: 'photo_library'},
   {id: 'pets', label: 'Animaux', icon: 'pets'},
-  {id: 'services', label: 'Prestations', icon: 'hand_meal'},
-  {id: 'paid-services', label: 'Prestations Payantes', icon: 'payments'},
   {id: 'tarifs', label: 'Tarifs', icon: 'price_change'},
 ] as const;
 
@@ -59,6 +56,7 @@ export class ChambreDashboard {
   readonly snackBar = inject(MatSnackBar);
 
   readonly numero = input<number>(-1);
+  readonly saved = output<ChambreDto>();
 
   readonly chambre = signal<ChambreDto>({
     nom: "",
@@ -73,6 +71,46 @@ export class ChambreDashboard {
   activeSection: DashboardSection = 'general';
 
   saving = false;
+
+  ngOnChanges(): void {
+    const numero = this.numero();
+    if (numero < 0) {
+      this.chambre.set({nom: '', numero: -1, photos: [], lits: []});
+      return;
+    }
+
+    this.chambreService.chambresControllerFindOne(numero).subscribe({
+      next: (chambre) => this.chambre.set(chambre),
+      error: (error: {error?: {message?: string}}) => this.showSaveError(error),
+    });
+  }
+
+  save(): void {
+    if (this.saving) {
+      return;
+    }
+
+    const {numero, photos, lits, ...dto} = this.chambre();
+    this.saving = true;
+    const request = numero < 0
+      ? this.chambreService.chambresControllerCreate(dto)
+      : this.chambreService.chambresControllerUpdate(numero, dto);
+
+    request.subscribe({
+      next: (chambre) => {
+        this.chambre.set(chambre);
+        this.saved.emit(chambre);
+        this.snackBar.open('Sauvegardé', 'Fermer', {duration: 5000});
+      },
+      error: (error: {error?: {message?: string}}) => {
+        this.showSaveError(error);
+        this.saving = false;
+      },
+      complete: () => {
+        this.saving = false;
+      },
+    });
+  }
 
   update<K extends keyof CreateChambreDto>(
     field: K,
@@ -156,6 +194,14 @@ export class ChambreDashboard {
   private showPhotoError(error: { error?: { message?: string } }):
     void {
     this.saving = false;
+    this.snackBar.open(
+      `Échec : ${error.error?.message ?? 'Une erreur est survenue'}`,
+      'Fermer',
+      {duration: 10000, panelClass: ['red-snackbar']},
+    );
+  }
+
+  private showSaveError(error: {error?: {message?: string}}): void {
     this.snackBar.open(
       `Échec : ${error.error?.message ?? 'Une erreur est survenue'}`,
       'Fermer',

@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, inject, signal, viewChild} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatToolbar} from '@angular/material/toolbar';
@@ -31,6 +31,7 @@ export class ChambresDashboard {
   readonly chambres = signal<ChambreDto[]>([]);
   readonly selectedChambre = signal<number>(this.chambres().length > 0 ? 0 : -2);
   readonly pendingDeleteNumero = signal<number | null>(null);
+  readonly chambreDashboard = viewChild(ChambreDashboard);
 
   saving = false;
 
@@ -57,10 +58,33 @@ export class ChambresDashboard {
     this.pendingDeleteNumero.set(null);
   }
 
-  save(): void {}
+  save(): void {
+    this.chambreDashboard()?.save();
+  }
 
-  disabledDelete() {
-    return this.saving || this.selectedChambre() < 0;
+  chambreSaved(chambre: ChambreDto): void {
+    this.chambres.update((chambres) => {
+      const index = chambres.findIndex(({numero}) => numero === chambre.numero);
+      if (index < 0) {
+        return [...chambres, chambre];
+      }
+      return chambres.map((existing, currentIndex) =>
+        currentIndex === index ? chambre : existing,
+      );
+    });
+    this.select(chambre.numero);
+  }
+
+  actionDisabled(s: number) {
+    return this.saving || this.selectedChambre() < s;
+  }
+
+  saveDisabled() {
+    return this.actionDisabled(-1)
+  }
+
+  deleteDisabled() {
+    return this.actionDisabled(0);
   }
 
   delete(): void {

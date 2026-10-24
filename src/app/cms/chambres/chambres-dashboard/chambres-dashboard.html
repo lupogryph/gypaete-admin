@@ -5,7 +5,7 @@
       (selectionChange)="select($event.value)"
     >
       @for (chambre of chambres(); track chambre.numero) {
-        <mat-option [value]="chambre.numero">Chambre {{ chambre.numero }}</mat-option>
+        <mat-option [value]="chambre.numero"><mat-icon>bedroom_parent</mat-icon>{{ chambre.nom }}</mat-option>
       }
       <mat-option [value]="-1"><mat-icon>add</mat-icon>{{ selectedChambre() === -1 ? 'Création...' : 'Créer'}}</mat-option>
     </mat-select>
@@ -13,7 +13,7 @@
   <button
     matButton="outlined"
     type="button"
-    [disabled]="saving"
+    [disabled]="saveDisabled()"
     (click)="save()"
   >
     <mat-icon>save</mat-icon>
@@ -23,7 +23,7 @@
   <button
     matButton="outlined"
     type="button"
-    [disabled]="disabledDelete()"
+    [disabled]="deleteDisabled()"
     (click)="delete()"
   >
     <mat-icon>{{ pendingDeleteNumero() === selectedChambre() ? 'warning' : 'delete' }}</mat-icon>
@@ -34,5 +34,8 @@
 </mat-toolbar>
 
 @if (selectedChambre() > -2) {
-  <app-chambre-dashboard [numero]="selectedChambre()"></app-chambre-dashboard>
+  <app-chambre-dashboard
+    [numero]="selectedChambre()"
+    (saved)="chambreSaved($event)"
+  ></app-chambre-dashboard>
 }
