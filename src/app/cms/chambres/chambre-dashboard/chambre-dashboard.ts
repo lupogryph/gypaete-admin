@@ -14,9 +14,11 @@ import {updateField} from '../../shared/utils/update-field';
 import {PrestationPayanteTable} from '../../shared/forms/conditions/prestation-payante-table/prestation-payante-table';
 import {StorageStatus} from '../../shared/photos/storage-status/storage-status';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {FrenTable} from '../../shared/forms/fren-table/fren-table';
 
 const dashList = [
   {id: 'general', label: 'General', icon: 'home'},
+  {id: 'vues', label: 'Vues', icon: 'landscape_2'},
   {id: 'gallery', label: 'Gallerie', icon: 'photo_library'},
   {id: 'pets', label: 'Animaux', icon: 'pets'},
   {id: 'paid-services', label: 'Prestations Payantes', icon: 'payments'},
@@ -41,6 +43,7 @@ type DashboardSection = (typeof dashList)[number]['id'];
     PrestationPayanteTable,
     StorageStatus,
     MatPrefix,
+    FrenTable,
   ],
   selector: 'app-chambre-dashboard',
   styleUrl: './chambre-dashboard.scss',
