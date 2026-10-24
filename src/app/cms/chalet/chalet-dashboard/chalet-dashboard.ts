@@ -3,13 +3,12 @@ import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatRipple} from '@angular/material/core';
 import {MatList, MatListItem, MatListItemIcon} from '@angular/material/list';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatToolbar} from '@angular/material/toolbar';
 import {DescriptionForm} from '../../shared/forms/description-form/description-form';
 import {ChaletDto, ChaletService, CreateChaletDto, CreatePhotoDto, PhotoDto} from '../../../openapi';
 import {Gallery} from '../../shared/photos/gallery/gallery';
 import {PhotoUploadRequest} from '../../shared/photos/photo-upload-dialog/photo-upload-dialog';
-import {Observable, defaultIfEmpty, forkJoin} from 'rxjs';
+import {defaultIfEmpty, forkJoin, Observable} from 'rxjs';
 import {finalize, switchMap} from 'rxjs/operators';
 import {MatFormField, MatInput, MatLabel, MatPrefix} from '@angular/material/input';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
@@ -19,6 +18,7 @@ import {updateField} from '../../shared/utils/update-field';
 import {PrestationPayanteTable} from '../../shared/forms/conditions/prestation-payante-table/prestation-payante-table';
 import {ChaletPeriodTable} from '../chalet-period-table/chalet-period-table';
 import {StorageStatus} from '../../shared/photos/storage-status/storage-status';
+import {Snackbar} from '../../../core/snackbar/snackbar';
 
 const dashList = [
   {id: 'general', label: 'General', icon: 'home'},
@@ -60,7 +60,7 @@ type DashboardSection = (typeof dashList)[number]['id'];
 })
 export class ChaletDashboard {
   readonly chaletService = inject(ChaletService);
-  readonly snackBar = inject(MatSnackBar);
+  readonly snackBar = inject(Snackbar);
 
   readonly chalet = signal<ChaletDto>({
     nom: '',
@@ -108,15 +108,11 @@ export class ChaletDashboard {
     this.chaletService.chaletControllerUpdate(update).subscribe({
       next: (updatedChalet) => {
         this.setChalet(updatedChalet);
-        this.snackBar.open('Sauvegardé', 'Fermer', {duration: 5000});
+        this.snackBar.success('Sauvegardé');
       },
       error: (error: { error?: { message?: string } }) => {
         this.saving = false;
-        this.snackBar.open(
-          `Échec : ${error.error?.message ?? 'Une erreur est survenue'}`,
-          'Fermer',
-          {duration: 10000, panelClass: ['red-snackbar']},
-        );
+        this.snackBar.error(error.error?.message);
       },
       complete: () => {
         this.saving = false;
@@ -157,7 +153,7 @@ export class ChaletDashboard {
       .subscribe({
         next: (chalet) => {
           this.setChalet(chalet);
-          this.snackBar.open('Photos ajoutées', 'Fermer', {duration: 5000});
+          this.snackBar.success('Photos ajoutées');
         },
         error: (error: { error?: { message?: string } }) => this.showPhotoError(error),
       });
@@ -176,7 +172,7 @@ export class ChaletDashboard {
       .subscribe({
         next: (chalet) => {
           this.setChalet(chalet);
-          this.snackBar.open('Photos supprimées', 'Fermer', {duration: 5000});
+          this.snackBar.success('Photos supprimées');
         },
         error: (error: { error?: { message?: string } }) => this.showPhotoError(error),
       });
@@ -188,11 +184,7 @@ export class ChaletDashboard {
 
   private showPhotoError(error: { error?: { message?: string } }): void {
     this.saving = false;
-    this.snackBar.open(
-      `Échec : ${error.error?.message ?? 'Une erreur est survenue'}`,
-      'Fermer',
-      {duration: 10000, panelClass: ['red-snackbar']},
-    );
+    this.snackBar.error(error.error?.message);
   }
 
 }

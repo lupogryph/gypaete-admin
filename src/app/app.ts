@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy} from '@angular/core';
+import {Component, ChangeDetectionStrategy, inject} from '@angular/core';
 import {Router, RouterOutlet} from '@angular/router';
 import {AuthService} from './openapi';
 import {Topbar} from './topbar/topbar';
@@ -14,13 +14,10 @@ import {JwtService} from './core/auth/jwt.service';
   styleUrl: './app.scss',
 })
 export class App {
-
-  constructor(
-    private router: Router,
-    private auth: AuthService,
-    private jwtService: JwtService,
-    private currentUserService: CurrentUserService,
-  ) {}
+  private readonly router = inject(Router);
+  private readonly auth = inject(AuthService);
+  private readonly jwtService = inject(JwtService);
+  private readonly currentUserService = inject(CurrentUserService);
 
   ngOnInit() {
     if (!this.jwtService.isAuthenticated()) {

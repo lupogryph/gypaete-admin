@@ -78,15 +78,28 @@
         <app-fren-table
           [frens]="chambre().vues ?? []"
           (frensChange)="update('vues', $event)"
-          ></app-fren-table>
+        ></app-fren-table>
       }
       @case ('gallery') {
-        <app-storage-status [refreshKey]="storageRefreshKey()"></app-storage-status>
-        <app-gallery
-          [photos]="chambre().photos"
-          (uploadRequested)="uploadPhotos($event)"
-          (deletePhotos)="deletePhotos($event)"
-        ></app-gallery>
+        @if (numero() < 0) {
+          <mat-card appearance="outlined">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>hide_image</mat-icon>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              La gallerie n'est pas disponible tant que l'élément n'est pas sauvegardé
+            </mat-card-content>
+          </mat-card>
+        } @else {
+          <app-storage-status [refreshKey]="storageRefreshKey()"></app-storage-status>
+          <app-gallery
+            [photos]="chambre().photos"
+            (uploadRequested)="uploadPhotos($event)"
+            (deletePhotos)="deletePhotos($event)"
+          ></app-gallery>
+        }
       }
       @case ('pets') {
         <mat-slide-toggle

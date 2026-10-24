@@ -6,9 +6,9 @@ import {
   ChambreDto,
   ChambresService,
 } from '../../../openapi';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatFormField, MatOption, MatSelect} from '@angular/material/select';
 import {ChambreDashboard} from '../chambre-dashboard/chambre-dashboard';
+import {Snackbar} from '../../../core/snackbar/snackbar';
 
 @Component({
   imports: [
@@ -26,7 +26,7 @@ import {ChambreDashboard} from '../chambre-dashboard/chambre-dashboard';
 })
 export class ChambresDashboard {
   readonly chambresService = inject(ChambresService);
-  readonly snackBar = inject(MatSnackBar);
+  readonly snackBar = inject(Snackbar);
 
   readonly chambres = signal<ChambreDto[]>([]);
   readonly selectedChambre = signal<number>(this.chambres().length > 0 ? 0 : -2);
@@ -44,11 +44,7 @@ export class ChambresDashboard {
         }
       },
       error: (error: {error?: {message?: string}}) => {
-        this.snackBar.open(
-          `Échec : ${error.error?.message ?? 'Une erreur est survenue'}`,
-          'Fermer',
-          {duration: 10000, panelClass: ['red-snackbar']},
-        );
+        this.snackBar.error(error.error?.message);
       },
     });
   }
@@ -104,11 +100,7 @@ export class ChambresDashboard {
       next: () => this.chambresDelete(numero),
       error: (error: {error?: {message?: string}}) => {
         this.saving = false;
-        this.snackBar.open(
-          `Échec : ${error.error?.message ?? 'Une erreur est survenue'}`,
-          'Fermer',
-          {duration: 10000, panelClass: ['red-snackbar']},
-        );
+        this.snackBar.error(error.error?.message);
       },
       complete: () => {
         this.saving = false;
@@ -121,7 +113,7 @@ export class ChambresDashboard {
     if (this.selectedChambre() === numero) {
       this.selectedChambre.set(this.chambres()[0]?.numero ?? -2);
     }
-    this.snackBar.open(`Chambre ${numero} supprimée`, 'Fermer', {duration: 5000});
+    this.snackBar.success(`Chambre ${numero} supprimée`);
   }
 
 }

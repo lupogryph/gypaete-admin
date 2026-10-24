@@ -13,8 +13,9 @@ import {ConditionTable} from '../../shared/forms/conditions/condition-table/cond
 import {updateField} from '../../shared/utils/update-field';
 import {PrestationPayanteTable} from '../../shared/forms/conditions/prestation-payante-table/prestation-payante-table';
 import {StorageStatus} from '../../shared/photos/storage-status/storage-status';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {FrenTable} from '../../shared/forms/fren-table/fren-table';
+import {Snackbar} from '../../../core/snackbar/snackbar';
+import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
 
 const dashList = [
   {id: 'general', label: 'General', icon: 'home'},
@@ -44,6 +45,10 @@ type DashboardSection = (typeof dashList)[number]['id'];
     StorageStatus,
     MatPrefix,
     FrenTable,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
   ],
   selector: 'app-chambre-dashboard',
   styleUrl: './chambre-dashboard.scss',
@@ -51,7 +56,7 @@ type DashboardSection = (typeof dashList)[number]['id'];
 })
 export class ChambreDashboard {
   readonly chambreService = inject(ChambresService);
-  readonly snackBar = inject(MatSnackBar);
+  readonly snackBar = inject(Snackbar);
 
   readonly numero = input<number>(-1);
   readonly saved = output<ChambreDto>();
@@ -79,7 +84,7 @@ export class ChambreDashboard {
 
     this.chambreService.chambresControllerFindOne(numero).subscribe({
       next: (chambre) => this.chambre.set(chambre),
-      error: (error: {error?: {message?: string}}) => this.showSaveError(error),
+      error: (error: {error?: {message?: string | string[]}}) => this.snackBar.error(error.error?.message),
     });
   }
 
@@ -97,10 +102,10 @@ export class ChambreDashboard {
     request.subscribe({
       next: (chambre) => {
         this.saved.emit(chambre);
-        this.snackBar.open('Sauvegardé', 'Fermer', {duration: 5000});
+        this.snackBar.success('Sauvegardé');
       },
-      error: (error: {error?: {message?: string}}) => {
-        this.showSaveError(error);
+      error: (error: {error?: {message?: string | string[]}}) => {
+        this.snackBar.error(error.error?.message);
         this.saving = false;
       },
       complete: () => {
@@ -157,9 +162,9 @@ export class ChambreDashboard {
       .subscribe({
         next: (chambre) => {
           this.chambre.set(chambre);
-          this.snackBar.open('Photos ajoutées', 'Fermer', {duration: 5000});
+          this.snackBar.success('Photos ajoutées');
         },
-        error: (error: { error?: { message?: string } }) => this.showPhotoError(error),
+        error: (error: { error?: { message?: string } }) => this.snackBar.error(error.error?.message),
       });
   }
 
@@ -178,32 +183,13 @@ export class ChambreDashboard {
       .subscribe({
         next: (chambre) => {
           this.chambre.set(chambre);
-          this.snackBar.open('Photos supprimées', 'Fermer', {duration: 5000});
+          this.snackBar.success('Photos supprimées');
         },
-        error: (error: { error?: { message?: string } }) => this.showPhotoError(error),
+        error: (error: { error?: { message?: string } }) => this.snackBar.error(error.error?.message),
       });
   }
 
   deletePhoto(photo: PhotoDto) {
     return this.chambreService.chambresControllerDeletePhoto(this.numero(), photo.id);
   }
-
-  private showPhotoError(error: { error?: { message?: string } }):
-    void {
-    this.saving = false;
-    this.snackBar.open(
-      `Échec : ${error.error?.message ?? 'Une erreur est survenue'}`,
-      'Fermer',
-      {duration: 10000, panelClass: ['red-snackbar']},
-    );
-  }
-
-  private showSaveError(error: {error?: {message?: string}}): void {
-    this.snackBar.open(
-      `Échec : ${error.error?.message ?? 'Une erreur est survenue'}`,
-      'Fermer',
-      {duration: 10000, panelClass: ['red-snackbar']},
-    );
-  }
-
 }

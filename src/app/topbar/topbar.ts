@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy} from '@angular/core';
+import {Component, ChangeDetectionStrategy, inject} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -25,14 +25,12 @@ const routeList = [
   styleUrl: './topbar.scss',
 })
 export class Topbar {
+  private readonly currentUserService = inject(CurrentUserService);
+  private readonly jwtService = inject(JwtService);
+  private readonly router = inject(Router);
+
   user = userSignal;
   readonly routeList = routeList;
-
-  constructor(
-    private currentUserService: CurrentUserService,
-    private jwtService: JwtService,
-    private router: Router,
-  ) {}
 
   logout() {
     this.jwtService.clearToken();

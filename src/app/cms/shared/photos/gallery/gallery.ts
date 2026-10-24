@@ -1,4 +1,4 @@
-import {Component, input, output, signal} from '@angular/core';
+import {Component, inject, input, output, signal} from '@angular/core';
 import {MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatDialog} from '@angular/material/dialog';
@@ -12,12 +12,12 @@ import {PhotoUploadDialog, PhotoUploadRequest} from '../photo-upload-dialog/phot
   templateUrl: './gallery.html',
 })
 export class Gallery {
+  private readonly dialog = inject(MatDialog);
+
   readonly photos = input<PhotoDto[]>([]);
   readonly deletePhotos = output<PhotoDto[]>();
   readonly uploadRequested = output<PhotoUploadRequest>();
   protected readonly selection = signal<PhotoDto[]>([]);
-
-  constructor(private readonly dialog: MatDialog) {}
 
   openUploadDialog(): void {
     this.dialog

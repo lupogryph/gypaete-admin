@@ -1,4 +1,4 @@
-import {Component, effect, model, untracked, ViewChild} from '@angular/core';
+import {Component, effect, inject, model, untracked, ViewChild} from '@angular/core';
 import {FormArray, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
@@ -30,6 +30,8 @@ type ConditionForm = FormGroup<FrEnConditionControls>;
   templateUrl: './condition-table.html',
 })
 export class ConditionTable {
+  private readonly frenFormService = inject(FrenFormService);
+
   readonly conditions = model<ConditionDto[]>([]);
 
   @ViewChild(MatTable) private table?: MatTable<ConditionForm>;
@@ -38,7 +40,7 @@ export class ConditionTable {
   readonly temporalites = Object.values(Temporalite);
   readonly formArray = new FormArray<ConditionForm>([]);
 
-  constructor(private readonly frenFormService: FrenFormService) {
+  constructor() {
     effect(() => {
       const conditions = this.conditions();
       untracked(() => {

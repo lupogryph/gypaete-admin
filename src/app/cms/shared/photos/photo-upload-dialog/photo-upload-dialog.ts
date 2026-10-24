@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {
   MatDialogActions,
@@ -32,11 +32,11 @@ export interface PhotoUploadRequest {
   styleUrl: './photo-upload-dialog.scss',
 })
 export class PhotoUploadDialog {
+  private readonly dialogRef = inject(MatDialogRef<PhotoUploadDialog, PhotoUploadRequest>);
+
   readonly files = signal<File[]>([]);
   readonly url = signal('');
   errorMessage: string | null = null;
-
-  constructor(private readonly dialogRef: MatDialogRef<PhotoUploadDialog, PhotoUploadRequest>) {}
 
   selectFiles(event: Event): void {
     const input = event.target;
