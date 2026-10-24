@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 :host {
   display: flex;
   flex-direction: column;
@@ -14,4 +16,8 @@
 .separation {
   display: flex;
   height: 50px;
+}
+
+.title {
+  @include mat.form-field-density(-3);
 }
