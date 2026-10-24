@@ -17,44 +17,61 @@
     @switch (activeSection) {
 
       @case ('general') {
-        <section class="form-section">
-          <mat-form-field appearance="outline" class="field">
-            <mat-label>Nom</mat-label>
-            <input
-              #inputNom
-              matInput
-              [value]="chambre().nom"
-              (input)="update('nom', inputNom.value)"
-              autocomplete="off"
-            />
-            <mat-icon matPrefix>other_houses</mat-icon>
-          </mat-form-field>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Nom</mat-label>
+          <input
+            #inputNom
+            matInput
+            [value]="chambre().nom"
+            (input)="update('nom', inputNom.value)"
+            autocomplete="off"
+          />
+          <mat-icon matPrefix>other_houses</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Nombre de personnes</mat-label>
+          <input
+            #mombrePersonnes
+            matInput
+            type="number"
+            [value]="chambre().mombrePersonnes ?? ''"
+            (input)="update('mombrePersonnes', mombrePersonnes.valueAsNumber)"
+          />
+          <mat-icon matPrefix>group</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Nombre de personnes max</mat-label>
+          <input
+            #mombrePersonnesMax
+            matInput
+            type="number"
+            [value]="chambre().mombrePersonnesMax ?? ''"
+            (input)="update('mombrePersonnesMax', mombrePersonnesMax.valueAsNumber)"
+          />
+          <mat-icon matPrefix>group</mat-icon>
+        </mat-form-field>
+
+        <section class="slider">
+          <mat-slide-toggle [checked]="chambre().pmr ?? false" (change)="update('pmr', $event.checked)">Personnes à
+            Mobilité Réduite
+          </mat-slide-toggle>
         </section>
-        <section class="form-section">
-          <mat-form-field appearance="outline" class="field">
-            <mat-label>Nombre de personnes</mat-label>
-            <input
-              #mombrePersonnes
-              matInput
-              type="number"
-              [value]="chambre().mombrePersonnes ?? ''"
-              (input)="update('mombrePersonnes', mombrePersonnes.valueAsNumber)"
-            />
-            <mat-icon matPrefix>group</mat-icon>
-          </mat-form-field>
+        <section class="slider">
+          <mat-slide-toggle [checked]="chambre().tv ?? false" (change)="update('tv', $event.checked)">Télévision
+          </mat-slide-toggle>
         </section>
-        <section class="form-section">
-          <mat-form-field appearance="outline" class="field">
-            <mat-label>Nombre de personnes max</mat-label>
-            <input
-              #mombrePersonnesMax
-              matInput
-              type="number"
-              [value]="chambre().mombrePersonnesMax ?? ''"
-              (input)="update('mombrePersonnesMax', mombrePersonnesMax.valueAsNumber)"
-            />
-            <mat-icon matPrefix>group</mat-icon>
-          </mat-form-field>
+        <section class="slider">
+          <mat-slide-toggle [checked]="chambre().wifi ?? false" (change)="update('wifi', $event.checked)">WiFi
+          </mat-slide-toggle>
+        </section>
+        <section class="slider">
+          <mat-slide-toggle [checked]="chambre().terrasse ?? false" (change)="update('terrasse', $event.checked)">
+            Terrasse
+          </mat-slide-toggle>
+        </section>
+        <section class="slider">
+          <mat-slide-toggle [checked]="chambre().balcon ?? false" (change)="update('balcon', $event.checked)">Balcon
+          </mat-slide-toggle>
         </section>
       }
       @case ('gallery') {
@@ -69,7 +86,8 @@
         <mat-slide-toggle
           [checked]="chambre().animauxAutorises ?? false"
           (change)="update('animauxAutorises', $event.checked)"
-        >Animaux autorisés</mat-slide-toggle>
+        >Animaux autorisés
+        </mat-slide-toggle>
         <p></p>
         <app-condition-table
           [conditions]="chambre().animaux ?? []"
