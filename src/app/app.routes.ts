@@ -11,5 +11,5 @@ export const routes: Routes = [
   { path: 'chalet', component: ChaletDashboard },
   // { path: 'chambres', component: Chambres },
   { path: 'users', component: UsersDashboard },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'chalet', pathMatch: 'full' },
 ];
