@@ -98,7 +98,6 @@ export class ChambreDashboard {
 
     request.subscribe({
       next: (chambre) => {
-        this.chambre.set(chambre);
         this.saved.emit(chambre);
         this.snackBar.open('Sauvegardé', 'Fermer', {duration: 5000});
       },
