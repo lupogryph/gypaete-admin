@@ -1,0 +1,82 @@
+<div class="dash-layout">
+  <mat-list class="dash-navigation" aria-label="Sections du chalet">
+    @for (item of dashList; track item.id) {
+      <mat-list-item
+        matRipple
+        [class.selected]="activeSection === item.id"
+        [attr.aria-current]="activeSection === item.id ? 'page' : null"
+        (click)="activeSection = item.id"
+      >
+        <mat-icon matListItemIcon fontSet="material-symbols-outlined">{{ item.icon }}</mat-icon>
+        <div matListItemTitle>{{ item.label }}</div>
+      </mat-list-item>
+    }
+  </mat-list>
+
+  <section class="dash-content">
+    @switch (activeSection) {
+
+      @case ('general') {
+        <section class="form-section">
+          <mat-form-field appearance="outline" class="field">
+            <mat-label>Nom</mat-label>
+            <input
+              #inputNom
+              matInput
+              [value]="chambre().nom"
+              (input)="update('nom', inputNom.value)"
+              autocomplete="off"
+            />
+            <mat-icon matPrefix>other_houses</mat-icon>
+          </mat-form-field>
+        </section>
+        <section class="form-section">
+          <mat-form-field appearance="outline" class="field">
+            <mat-label>Nombre de personnes</mat-label>
+            <input
+              #mombrePersonnes
+              matInput
+              type="number"
+              [value]="chambre().mombrePersonnes ?? ''"
+              (input)="update('mombrePersonnes', mombrePersonnes.valueAsNumber)"
+            />
+            <mat-icon matPrefix>group</mat-icon>
+          </mat-form-field>
+        </section>
+        <section class="form-section">
+          <mat-form-field appearance="outline" class="field">
+            <mat-label>Nombre de personnes max</mat-label>
+            <input
+              #mombrePersonnesMax
+              matInput
+              type="number"
+              [value]="chambre().mombrePersonnesMax ?? ''"
+              (input)="update('mombrePersonnesMax', mombrePersonnesMax.valueAsNumber)"
+            />
+            <mat-icon matPrefix>group</mat-icon>
+          </mat-form-field>
+        </section>
+      }
+      @case ('gallery') {
+        <app-storage-status [refreshKey]="storageRefreshKey()"></app-storage-status>
+        <app-gallery
+          [photos]="chambre().photos"
+          (uploadRequested)="uploadPhotos($event)"
+          (deletePhotos)="deletePhotos($event)"
+        ></app-gallery>
+      }
+      @case ('pets') {
+        <mat-slide-toggle
+          [checked]="chambre().animauxAutorises ?? false"
+          (change)="update('animauxAutorises', $event.checked)"
+        >Animaux autorisés</mat-slide-toggle>
+        <p></p>
+        <app-condition-table
+          [conditions]="chambre().animaux ?? []"
+          (conditionsChange)="update('animaux', $event)"
+        ></app-condition-table>
+      }
+
+    }
+  </section>
+</div>

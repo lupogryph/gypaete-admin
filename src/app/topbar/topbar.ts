@@ -11,7 +11,7 @@ import {JwtService} from '../core/auth/jwt.service';
 
 const routeList = [
   {id: 'chalet', label: 'Chalet', icon: 'cabin'},
-  {id: 'chambres', label: 'Chambres', icon: 'bed'},
+  {id: 'chambres', label: 'Chambres', icon: 'bedroom_parent'},
   {id: 'infos', label: 'Infos', icon: 'info'},
   {id: 'users', label: 'Utilisateurs', icon: 'group'},
 ] as const;

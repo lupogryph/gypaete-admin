@@ -1,0 +1,39 @@
+<mat-toolbar class="toolbar">
+  <mat-form-field appearance="outline" class="title" subscriptSizing="dynamic">
+    <mat-select
+      [value]="selectedChambre()"
+      (selectionChange)="select($event.value)"
+    >
+      @for (chambre of chambres(); track chambre.numero) {
+        <mat-option [value]="chambre.numero"><mat-icon>bedroom_parent</mat-icon>{{ chambre.nom }}</mat-option>
+      }
+      <mat-option [value]="-1"><mat-icon>add</mat-icon>{{ selectedChambre() === -1 ? 'Création...' : 'Créer'}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button
+    matButton="outlined"
+    type="button"
+    [disabled]="saveDisabled()"
+    (click)="save()"
+  >
+    <mat-icon>save</mat-icon>
+    Sauvegarder
+  </button>
+  <span class="spacer"></span>
+  <button
+    matButton="outlined"
+    type="button"
+    [disabled]="deleteDisabled()"
+    (click)="delete()"
+  >
+    <mat-icon>{{ pendingDeleteNumero() === selectedChambre() ? 'warning' : 'delete' }}</mat-icon>
+    {{ pendingDeleteNumero() === selectedChambre() ? 'Confirmer la suppression' : 'Supprimer' }}
+  </button>
+</mat-toolbar>
+
+@if (selectedChambre() > -2) {
+  <app-chambre-dashboard
+    [numero]="selectedChambre()"
+    (saved)="chambreSaved($event)"
+  ></app-chambre-dashboard>
+}

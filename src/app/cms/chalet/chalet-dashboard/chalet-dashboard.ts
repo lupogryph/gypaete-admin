@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatRipple} from '@angular/material/core';
@@ -6,7 +6,7 @@ import {MatList, MatListItem, MatListItemIcon} from '@angular/material/list';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatToolbar} from '@angular/material/toolbar';
 import {DescriptionForm} from '../../shared/forms/description-form/description-form';
-import {ChaletDto, ChaletService, CreatePhotoDto, PhotoDto, UpdateChaletDto} from '../../../openapi';
+import {ChaletDto, ChaletService, CreateChaletDto, CreatePhotoDto, PhotoDto} from '../../../openapi';
 import {Gallery} from '../../shared/photos/gallery/gallery';
 import {PhotoUploadRequest} from '../../shared/photos/photo-upload-dialog/photo-upload-dialog';
 import {Observable, defaultIfEmpty, forkJoin} from 'rxjs';
@@ -59,6 +59,8 @@ type DashboardSection = (typeof dashList)[number]['id'];
   templateUrl: './chalet-dashboard.html',
 })
 export class ChaletDashboard {
+  readonly chaletService = inject(ChaletService);
+  readonly snackBar = inject(MatSnackBar);
 
   readonly chalet = signal<ChaletDto>({
     nom: '',
@@ -73,12 +75,6 @@ export class ChaletDashboard {
 
   saving = false;
 
-  constructor(
-    private readonly chaletService: ChaletService,
-    private readonly snackBar: MatSnackBar,
-  ) {
-  }
-
   ngOnInit() {
     this.chaletService.chaletControllerFind().subscribe((chalet) => {
       this.setChalet(chalet);
@@ -86,7 +82,7 @@ export class ChaletDashboard {
   }
 
   private setChalet(chalet: ChaletDto): void {
-    this.chalet.set({...chalet, photos: [...chalet.photos]});
+    this.chalet.set(chalet);
   }
 
   update<K extends keyof ChaletDto>(
@@ -107,7 +103,7 @@ export class ChaletDashboard {
     if (this.saving) {
       return;
     }
-    const update: UpdateChaletDto = this.chalet();
+    const update: CreateChaletDto = this.chalet();
     this.saving = true;
     this.chaletService.chaletControllerUpdate(update).subscribe({
       next: (updatedChalet) => {
