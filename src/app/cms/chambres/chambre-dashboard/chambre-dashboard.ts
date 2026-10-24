@@ -22,6 +22,7 @@ const dashList = [
   {id: 'general', label: 'General', icon: 'home'},
   {id: 'gallery', label: 'Gallerie', icon: 'photo_library'},
   {id: 'pets', label: 'Animaux', icon: 'pets'},
+  {id: 'paid-services', label: 'Prestations Payantes', icon: 'payments'},
   {id: 'tarifs', label: 'Tarifs', icon: 'price_change'},
 ] as const;
 
@@ -29,20 +30,17 @@ type DashboardSection = (typeof dashList)[number]['id'];
 
 @Component({
   imports: [
-    MatButton,
     MatIcon,
     MatRipple,
     MatList,
     MatListItem,
     MatListItemIcon,
-    MatToolbar,
     Gallery,
     MatFormField,
     MatInput,
     MatLabel,
     MatSlideToggle,
     ConditionTable,
-    FrenTable,
     PrestationPayanteTable,
     StorageStatus,
     MatPrefix,
