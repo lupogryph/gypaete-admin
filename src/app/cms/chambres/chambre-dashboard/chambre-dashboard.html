@@ -74,6 +74,12 @@
           </mat-slide-toggle>
         </section>
       }
+      @case ('vues') {
+        <app-fren-table
+          [frens]="chambre().vues ?? []"
+          (frensChange)="update('vues', $event)"
+          ></app-fren-table>
+      }
       @case ('gallery') {
         <app-storage-status [refreshKey]="storageRefreshKey()"></app-storage-status>
         <app-gallery
