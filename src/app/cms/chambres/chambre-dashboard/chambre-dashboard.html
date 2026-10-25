@@ -52,26 +52,79 @@
         </mat-form-field>
 
         <section class="slider">
-          <mat-slide-toggle [checked]="chambre().pmr ?? false" (change)="update('pmr', $event.checked)">Personnes à
-            Mobilité Réduite
+          <mat-slide-toggle [checked]="chambre().pmr ?? false" (change)="update('pmr', $event.checked)">
+            <span class="label-with-icon"><mat-icon>accessible</mat-icon>Personnes à Mobilité Réduite</span>
           </mat-slide-toggle>
         </section>
         <section class="slider">
-          <mat-slide-toggle [checked]="chambre().tv ?? false" (change)="update('tv', $event.checked)">Télévision
+          <mat-slide-toggle [checked]="chambre().tv ?? false" (change)="update('tv', $event.checked)">
+            <span class="label-with-icon"><mat-icon>tv</mat-icon>Télévision</span>
           </mat-slide-toggle>
         </section>
         <section class="slider">
-          <mat-slide-toggle [checked]="chambre().wifi ?? false" (change)="update('wifi', $event.checked)">WiFi
+          <mat-slide-toggle [checked]="chambre().wifi ?? false" (change)="update('wifi', $event.checked)">
+            <span class="label-with-icon"><mat-icon>wifi</mat-icon>WiFi</span>
           </mat-slide-toggle>
         </section>
         <section class="slider">
           <mat-slide-toggle [checked]="chambre().terrasse ?? false" (change)="update('terrasse', $event.checked)">
-            Terrasse
+            <span class="label-with-icon"><mat-icon>deck</mat-icon>Terrasse</span>
           </mat-slide-toggle>
         </section>
         <section class="slider">
-          <mat-slide-toggle [checked]="chambre().balcon ?? false" (change)="update('balcon', $event.checked)">Balcon
+          <mat-slide-toggle [checked]="chambre().balcon ?? false" (change)="update('balcon', $event.checked)">
+            <span class="label-with-icon"><mat-icon>balcony</mat-icon>Balcon</span>
           </mat-slide-toggle>
+        </section>
+      }
+      @case ('description') {
+        <app-description-form
+          [description]="chambre().description"
+          (descriptionChange)="update('description', $event)"
+        ></app-description-form>
+      }
+      @case ('bath') {
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>WC</mat-label>
+          <input
+            #wc
+            matInput
+            type="number"
+            [value]="chambre().wc ?? ''"
+            (input)="update('wc', wc.valueAsNumber)"
+          />
+          <mat-icon matPrefix>wc</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Salle de bain</mat-label>
+          <input
+            #salleDeBain
+            matInput
+            type="number"
+            [value]="chambre().salleDeBain ?? ''"
+            (input)="update('salleDeBain', salleDeBain.valueAsNumber)"
+          />
+          <mat-icon matPrefix>bathroom</mat-icon>
+        </mat-form-field>
+        <section class="aligned">
+          <mat-checkbox
+            [checked]="chambre().baignoire"
+            (change)="update('baignoire', $event.checked)"
+          >
+            <span class="label-with-icon">
+            <mat-icon>bathtub</mat-icon>
+            Baignoire
+              </span>
+          </mat-checkbox>
+          <mat-checkbox
+            [checked]="chambre().douche"
+            (change)="update('douche', $event.checked)"
+          >
+            <span class="label-with-icon">
+            <mat-icon>shower</mat-icon>
+            Douche
+            </span>
+          </mat-checkbox>
         </section>
       }
       @case ('vues') {

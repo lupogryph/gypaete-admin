@@ -1,8 +1,14 @@
 import {Component, inject, input, output, signal} from '@angular/core';
 import {MatIcon} from '@angular/material/icon';
-import {MatRipple} from '@angular/material/core';
+import {MatOption, MatRipple} from '@angular/material/core';
 import {MatList, MatListItem, MatListItemIcon} from '@angular/material/list';
-import {ChambreDto, ChambresService, CreateChambreDto, CreatePhotoDto, PhotoDto} from '../../../openapi';
+import {
+  ChambreDto,
+  ChambresService,
+  CreateChambreDto,
+  CreatePhotoDto,
+  PhotoDto
+} from '../../../openapi';
 import {Gallery} from '../../shared/photos/gallery/gallery';
 import {PhotoUploadRequest} from '../../shared/photos/photo-upload-dialog/photo-upload-dialog';
 import {defaultIfEmpty, forkJoin, Observable} from 'rxjs';
@@ -16,10 +22,16 @@ import {StorageStatus} from '../../shared/photos/storage-status/storage-status';
 import {FrenTable} from '../../shared/forms/fren-table/fren-table';
 import {Snackbar} from '../../../core/snackbar/snackbar';
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
+import {DescriptionForm} from '../../shared/forms/description-form/description-form';
+import {MatSelect, MatSelectTrigger} from '@angular/material/select';
+import {ReactiveFormsModule} from '@angular/forms';
+import {MatCheckbox} from '@angular/material/checkbox';
 
 const dashList = [
   {id: 'general', label: 'General', icon: 'home'},
+  {id: 'description', label: 'Description', icon: 'description'},
   {id: 'vues', label: 'Vues', icon: 'landscape_2'},
+  {id: 'bath', label: 'Hygiène', icon: 'bathroom'},
   {id: 'gallery', label: 'Gallerie', icon: 'photo_library'},
   {id: 'pets', label: 'Animaux', icon: 'pets'},
   {id: 'paid-services', label: 'Prestations Payantes', icon: 'payments'},
@@ -49,6 +61,9 @@ type DashboardSection = (typeof dashList)[number]['id'];
     MatCardHeader,
     MatCardTitle,
     MatCardContent,
+    DescriptionForm,
+    ReactiveFormsModule,
+    MatCheckbox,
   ],
   selector: 'app-chambre-dashboard',
   styleUrl: './chambre-dashboard.scss',
@@ -192,4 +207,5 @@ export class ChambreDashboard {
   deletePhoto(photo: PhotoDto) {
     return this.chambreService.chambresControllerDeletePhoto(this.numero(), photo.id);
   }
+
 }

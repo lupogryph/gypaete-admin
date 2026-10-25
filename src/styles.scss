@@ -178,6 +178,17 @@ body {
   }
 }
 
+.aligned {
+  display: flex;
+  gap: 2rem;
+}
+
+.label-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .table {
   width: 100%;
 
