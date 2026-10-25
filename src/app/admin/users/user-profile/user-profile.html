@@ -1,5 +1,5 @@
 @if (user(); as currentUser) {
-  <section class="panneau sm">
+  <section class="dash-section sm">
     <app-user-form [user]="currentUser" (save)="update($event)" />
   </section>
 }
