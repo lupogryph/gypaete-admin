@@ -158,7 +158,8 @@
         <mat-slide-toggle
           [checked]="chambre().animauxAutorises ?? false"
           (change)="update('animauxAutorises', $event.checked)"
-        >Animaux autorisés
+        >
+          <span class="label-with-icon"><mat-icon>pets</mat-icon>Animaux autorisés</span>
         </mat-slide-toggle>
         <p></p>
         <app-condition-table
