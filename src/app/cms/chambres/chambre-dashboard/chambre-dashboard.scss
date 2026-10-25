@@ -13,12 +13,15 @@
 
 .separation {
   display: flex;
-  height: 50px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  &.line {
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
 }
 
 section.slider {
-  //display: flex;
   align-content: center;
-  //align-items: center;
   height: 50px;
 }

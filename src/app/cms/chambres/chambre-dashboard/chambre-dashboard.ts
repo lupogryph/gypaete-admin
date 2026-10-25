@@ -13,7 +13,7 @@ import {Gallery} from '../../shared/photos/gallery/gallery';
 import {PhotoUploadRequest} from '../../shared/photos/photo-upload-dialog/photo-upload-dialog';
 import {defaultIfEmpty, forkJoin, Observable} from 'rxjs';
 import {finalize, switchMap} from 'rxjs/operators';
-import {MatFormField, MatInput, MatLabel, MatPrefix} from '@angular/material/input';
+import {MatFormField, MatInput, MatLabel, MatPrefix, MatSuffix} from '@angular/material/input';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {ConditionTable} from '../../shared/forms/conditions/condition-table/condition-table';
 import {updateField} from '../../shared/utils/update-field';
@@ -64,6 +64,7 @@ type DashboardSection = (typeof dashList)[number]['id'];
     DescriptionForm,
     ReactiveFormsModule,
     MatCheckbox,
+    MatSuffix,
   ],
   selector: 'app-chambre-dashboard',
   styleUrl: './chambre-dashboard.scss',
@@ -80,7 +81,8 @@ export class ChambreDashboard {
     nom: "",
     numero: -1,
     photos: [],
-    lits: []
+    lits: [],
+    cout: 0
   })
 
   readonly dashList = dashList;
@@ -93,7 +95,7 @@ export class ChambreDashboard {
   ngOnChanges(): void {
     const numero = this.numero();
     if (numero < 0) {
-      this.chambre.set({nom: '', numero: -1, photos: [], lits: []});
+      this.chambre.set({nom: '', numero: -1, photos: [], lits: [], cout: 0});
       return;
     }
 

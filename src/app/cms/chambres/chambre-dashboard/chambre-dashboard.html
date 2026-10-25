@@ -173,7 +173,51 @@
           (prestationsChange)="update('prestationsPayantes', $event)"
         ></app-prestation-payante-table>
       }
-
+      @case ('tarifs') {
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Coût</mat-label>
+          <input
+            #cout
+            matInput
+            type="number"
+            [value]="chambre().cout"
+            (input)="update('cout', cout.valueAsNumber)"
+            class="right-align"
+          />
+          <span matTextSuffix>&nbsp;€</span>
+        </mat-form-field>
+        <div class="separation line"></div>
+        <h3 class="aligned">
+          <mat-icon>person_add</mat-icon>
+          Personnes supplementaires
+        </h3>
+        <app-condition-table
+          [conditions]="chambre().plusPersonne ?? []"
+          (conditionsChange)="update('plusPersonne', $event)"
+        ></app-condition-table>
+        <div class="separation line"></div>
+        <h3 class="aligned">
+          <mat-icon>night_sight_max</mat-icon>
+          Nuits supplementaires
+        </h3>
+        <div class="separation"></div>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>A partir de ... nuit{{ (chambre().plusNuitMinimum ?? 0) > 1 ? 's' : '' }}</mat-label>
+          <input
+            #plusNuitMinimum
+            matInput
+            type="number"
+            [value]="chambre().plusNuitMinimum"
+            (input)="update('plusNuitMinimum', plusNuitMinimum.valueAsNumber)"
+          />
+          <mat-icon matPrefix>bedtime</mat-icon>
+        </mat-form-field>
+        <app-prestation-payante-table
+          [prestations]="chambre().plusNuit ?? []"
+          (prestationsChange)="update('plusNuit', $event)"
+        >
+        </app-prestation-payante-table>
+      }
     }
   </section>
 </div>
