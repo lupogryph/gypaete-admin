@@ -26,10 +26,12 @@ import {DescriptionForm} from '../../shared/forms/description-form/description-f
 import {MatSelect, MatSelectTrigger} from '@angular/material/select';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatCheckbox} from '@angular/material/checkbox';
+import {LitTable} from '../../mobilier/lit/lit-table/lit-table';
 
 const dashList = [
   {id: 'general', label: 'General', icon: 'home'},
   {id: 'description', label: 'Description', icon: 'description'},
+  {id: 'beds', label: 'Lits', icon: 'bed'},
   {id: 'vues', label: 'Vues', icon: 'landscape_2'},
   {id: 'bath', label: 'Hygiène', icon: 'bathroom'},
   {id: 'gallery', label: 'Gallerie', icon: 'photo_library'},
@@ -65,6 +67,7 @@ type DashboardSection = (typeof dashList)[number]['id'];
     ReactiveFormsModule,
     MatCheckbox,
     MatSuffix,
+    LitTable,
   ],
   selector: 'app-chambre-dashboard',
   styleUrl: './chambre-dashboard.scss',
@@ -110,7 +113,7 @@ export class ChambreDashboard {
       return;
     }
 
-    const {numero, photos, lits, ...dto} = this.chambre();
+    const {numero, photos, ...dto} = this.chambre();
     this.saving = true;
     const request = numero < 0
       ? this.chambreService.chambresControllerCreate(dto)

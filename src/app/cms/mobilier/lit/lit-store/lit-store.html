@@ -1,0 +1,39 @@
+<mat-list aria-label="Lits">
+  @for (lit of lits(); track lit.id) {
+    <mat-list-item class="lit-list-item">
+      <mat-icon matListItemIcon fontSet="material-symbols-outlined">bed</mat-icon>
+      <span matListItemTitle>{{ lit.classe }}</span>
+      <span matListItemLine>Largeur : {{ lit.largeur }} cm</span>
+      <div matListItemMeta class="lit-actions">
+        <button
+          mat-icon-button
+          type="button"
+          [attr.aria-label]="'Modifier le lit ' + lit.classe"
+          title="Modifier"
+          (click)="openLitDialog(lit)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          type="button"
+          [disabled]="deletingLitId() === lit.id"
+          [attr.aria-label]="pendingDeleteId() === lit.id
+            ? 'Confirmer la suppression du lit ' + lit.classe
+            : 'Supprimer le lit ' + lit.classe"
+          [title]="pendingDeleteId() === lit.id ? 'Cliquer à nouveau pour supprimer' : 'Supprimer'"
+          (click)="deleteLit(lit)"
+        >
+          <mat-icon>{{ pendingDeleteId() === lit.id ? 'delete_forever' : 'delete' }}</mat-icon>
+        </button>
+      </div>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+  }
+  <mat-list-item class="add-lit-item">
+    <button mat-button type="button" (click)="openLitDialog()">
+      <mat-icon>add</mat-icon>
+      Ajouter
+    </button>
+  </mat-list-item>
+</mat-list>

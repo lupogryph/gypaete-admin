@@ -1,0 +1,24 @@
+.lit-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(18rem, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.table {
+  width: 100%;
+}
+
+.table mat-form-field {
+  width: 100%;
+}
+
+.lit-store {
+  min-width: 0;
+}
+
+@media (max-width: 800px) {
+  .lit-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
