@@ -1,14 +1,13 @@
-import { Injectable } from '@angular/core';
-import { UserService } from '../../openapi';
-import { userSignal } from '../../../main';
+import {inject, Injectable} from '@angular/core';
+import {UserService} from '../../openapi';
+import {userSignal} from '../../../main';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class CurrentUserService {
-
-  constructor(private userService: UserService) {}
+  private readonly userService = inject(UserService);
 
   setUser() {
     this.userService.userControllerFind().subscribe({

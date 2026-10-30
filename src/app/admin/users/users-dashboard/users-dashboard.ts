@@ -1,12 +1,10 @@
-import {ChangeDetectionStrategy, Component, OnInit, signal} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {ChangeDetectionStrategy, Component, inject, OnInit, signal} from '@angular/core';
 import {userSignal} from '../../../../main';
 import {CreateUserDto, Role, UpdateUserDto, UserDto, UserService} from '../../../openapi';
 import {UserForm} from '../user-form/user-form';
 import {UsersList} from '../users-list/users-list';
-import {MatButton} from '@angular/material/button';
-import {MatIcon} from '@angular/material/icon';
 import {MatToolbar} from '@angular/material/toolbar';
+import {Snackbar} from '../../../core/snackbar/snackbar';
 
 @Component({
   selector: 'app-users-dashboard',
@@ -16,15 +14,13 @@ import {MatToolbar} from '@angular/material/toolbar';
   styleUrl: './users-dashboard.scss',
 })
 export class UsersDashboard implements OnInit {
+  readonly userService = inject(UserService);
+  readonly snackBar = inject(Snackbar);
+
   readonly user = userSignal;
   readonly users = signal<UserDto[]>([]);
   cursor: number | null = null;
   creatingUser = false;
-
-  constructor(
-    private readonly userService: UserService,
-    private readonly snackBar: MatSnackBar,
-  ) {}
 
   get selectedUser(): UserDto | undefined {
     return this.cursor === null ? this.user() : this.users()[this.cursor];
@@ -37,7 +33,7 @@ export class UsersDashboard implements OnInit {
 
     this.userService.userAdminControllerFindAll().subscribe({
       next: (users) => this.users.set(users.filter((user) => user.id !== this.user()?.id)),
-      error: (error) => this.showError(error),
+      error: (error) => this.snackBar.error(error),
     });
   }
 
@@ -72,9 +68,9 @@ export class UsersDashboard implements OnInit {
         if (updatedUser.id === this.user()?.id) {
           userSignal.set(updatedUser);
         }
-        this.snackBar.open('Sauvegardé', 'Fermer', {duration: 5000});
+        this.snackBar.success('Sauvegardé');
       },
-      error: (error) => this.showError(error),
+      error: (error) => this.snackBar.error(error),
     });
   }
 
@@ -88,9 +84,9 @@ export class UsersDashboard implements OnInit {
       next: () => {
         this.users.update((users) => users.filter((user) => user.id !== selected.id));
         this.cursor = null;
-        this.snackBar.open('Utilisateur supprimé', 'Fermer', {duration: 5000});
+        this.snackBar.success('Utilisateur supprimé');
       },
-      error: (error) => this.showError(error),
+      error: (error) => this.snackBar.error(error),
     });
   }
 
@@ -98,9 +94,7 @@ export class UsersDashboard implements OnInit {
 
   private createUser(dto: UpdateUserDto): void {
     if (!dto.password) {
-      this.snackBar.open('Un mot de passe est requis pour créer un utilisateur', 'Fermer', {
-        duration: 5000,
-      });
+      this.snackBar.error('Un mot de passe est requis pour créer un utilisateur');
       return;
     }
 
@@ -117,17 +111,9 @@ export class UsersDashboard implements OnInit {
         this.users.update((users) => [...users, createdUser]);
         this.cursor = this.users().length - 1;
         this.creatingUser = false;
-        this.snackBar.open('Utilisateur créé', 'Fermer', {duration: 5000});
+        this.snackBar.success('Utilisateur créé');
       },
-      error: (error) => this.showError(error),
+      error: (error) => this.snackBar.error(error),
     });
-  }
-
-  private showError(error: {error?: {message?: string}}): void {
-    this.snackBar.open(
-      `Échec : ${error.error?.message ?? 'Une erreur est survenue'}`,
-      'Fermer',
-      {duration: 10000, panelClass: ['red-snackbar']},
-    );
   }
 }

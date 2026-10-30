@@ -1,4 +1,4 @@
-import {Component, effect, model, signal, untracked} from '@angular/core';
+import {Component, effect, inject, model, signal, untracked} from '@angular/core';
 import {FormField, form} from '@angular/forms/signals';
 import {FrEn} from '../../../../openapi';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
@@ -13,6 +13,8 @@ import {MatIcon} from '@angular/material/icon';
   templateUrl: './description-form.html',
 })
 export class DescriptionForm {
+  private readonly translationService = inject(TranslationService);
+
   readonly description = model<FrEn | undefined>(undefined);
   private readonly formModel = signal({fr: '', en: ''});
   readonly hasEnglish = signal(false);
@@ -20,7 +22,7 @@ export class DescriptionForm {
   translating = false;
   translationError: string | null = null;
 
-  constructor(private readonly translationService: TranslationService) {
+  constructor() {
     effect(() => {
       const description = this.description();
       const fr = description?.fr ?? '';

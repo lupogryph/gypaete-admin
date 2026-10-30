@@ -1,15 +1,16 @@
-import {Component, signal, ChangeDetectionStrategy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
 import {ReactiveFormsModule,} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
-import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {AuthService} from '../openapi';
 import {CurrentUserService} from '../core/user/current-user.service';
-import {email, FormField, form, required} from '@angular/forms/signals';
+import {email, form, FormField, required} from '@angular/forms/signals';
 import {JwtService} from '../core/auth/jwt.service';
+import {Snackbar} from '../core/snackbar/snackbar';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +29,12 @@ import {JwtService} from '../core/auth/jwt.service';
   styleUrl: './login.scss',
 })
 export class Login {
+  private readonly snackBar = inject(Snackbar);
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly jwtService = inject(JwtService);
+  private readonly currentUserService = inject(CurrentUserService);
+
   loginModel = signal({
     email: '',
     password: '',
@@ -38,14 +45,6 @@ export class Login {
     email(sp.email, {message: 'Le login doit être une adresse mail'});
     required(sp.password, {message: 'Le mot de passe ne peut pas être vide'});
   });
-
-  constructor(
-    private _snackBar: MatSnackBar,
-    private router: Router,
-    private authService: AuthService,
-    private jwtService: JwtService,
-    private currentUserService: CurrentUserService,
-  ) {}
 
   connect(event: Event) {
     event.preventDefault();
@@ -58,17 +57,11 @@ export class Login {
           this.router.navigate(['']);
         },
         error: (error) => {
-          this._snackBar.open(`Echec de la connection : ${error.error.message}`, 'Fermer', {
-            duration: 10000,
-            panelClass: ['red-snackbar'],
-          });
+          this.snackBar.error(`Echec de la connection : ${error.error.message}`);
         },
       })
     } else {
-      this._snackBar.open('Identifiant invalide', 'Fermer', {
-        duration: 5000,
-        panelClass: ['red-snackbar']
-      });
+      this.snackBar.error('Identifiant invalide');
     }
   }
 }

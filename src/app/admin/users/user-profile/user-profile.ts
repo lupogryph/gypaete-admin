@@ -1,8 +1,8 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {userSignal} from '../../../../main';
 import {UpdateUserDto, UserService} from '../../../openapi';
 import {UserForm} from '../user-form/user-form';
+import {Snackbar} from '../../../core/snackbar/snackbar';
 
 @Component({
   selector: 'app-user-profile',
@@ -13,11 +13,8 @@ import {UserForm} from '../user-form/user-form';
 })
 export class UserProfile {
   readonly user = userSignal;
-
-  constructor(
-    private readonly userService: UserService,
-    private readonly snackBar: MatSnackBar,
-  ) {}
+  readonly userService = inject(UserService);
+  readonly snackBar = inject(Snackbar);
 
   update(dto: UpdateUserDto): void {
     this.userService.userControllerUpdate(dto).subscribe({
@@ -31,14 +28,10 @@ export class UserProfile {
             name: dto.name ?? currentUser.name,
           });
         }
-        this.snackBar.open('Sauvegardé', 'Fermer', {duration: 5000});
+        this.snackBar.saved();
       },
       error: (error: {error?: {message?: string}}) => {
-        this.snackBar.open(
-          `Échec : ${error.error?.message ?? 'Une erreur est survenue'}`,
-          'Fermer',
-          {duration: 10000, panelClass: ['red-snackbar']},
-        );
+        this.snackBar.error(error.error?.message);
       },
     });
   }

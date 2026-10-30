@@ -1,0 +1,229 @@
+<div class="dash-layout">
+  <mat-list class="dash-navigation" aria-label="Sections du chalet">
+    @for (item of dashList; track item.id) {
+      <mat-list-item
+        matRipple
+        [class.selected]="activeSection === item.id"
+        [attr.aria-current]="activeSection === item.id ? 'page' : null"
+        (click)="activeSection = item.id"
+      >
+        <mat-icon matListItemIcon fontSet="material-symbols-outlined">{{ item.icon }}</mat-icon>
+        <div matListItemTitle>{{ item.label }}</div>
+      </mat-list-item>
+    }
+  </mat-list>
+
+  <section class="dash-content">
+    @switch (activeSection) {
+
+      @case ('general') {
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Nom</mat-label>
+          <input
+            #inputNom
+            matInput
+            [value]="chambre().nom"
+            (input)="update('nom', inputNom.value)"
+            autocomplete="off"
+          />
+          <mat-icon matPrefix>other_houses</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Nombre de personnes</mat-label>
+          <input
+            #mombrePersonnes
+            matInput
+            type="number"
+            [value]="chambre().mombrePersonnes ?? ''"
+            (input)="update('mombrePersonnes', mombrePersonnes.valueAsNumber)"
+          />
+          <mat-icon matPrefix>group</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Nombre de personnes max</mat-label>
+          <input
+            #mombrePersonnesMax
+            matInput
+            type="number"
+            [value]="chambre().mombrePersonnesMax ?? ''"
+            (input)="update('mombrePersonnesMax', mombrePersonnesMax.valueAsNumber)"
+          />
+          <mat-icon matPrefix>group</mat-icon>
+        </mat-form-field>
+
+        <section class="slider">
+          <mat-slide-toggle [checked]="chambre().pmr ?? false" (change)="update('pmr', $event.checked)">
+            <span class="label-with-icon"><mat-icon>accessible</mat-icon>Personnes à Mobilité Réduite</span>
+          </mat-slide-toggle>
+        </section>
+        <section class="slider">
+          <mat-slide-toggle [checked]="chambre().tv ?? false" (change)="update('tv', $event.checked)">
+            <span class="label-with-icon"><mat-icon>tv</mat-icon>Télévision</span>
+          </mat-slide-toggle>
+        </section>
+        <section class="slider">
+          <mat-slide-toggle [checked]="chambre().wifi ?? false" (change)="update('wifi', $event.checked)">
+            <span class="label-with-icon"><mat-icon>wifi</mat-icon>WiFi</span>
+          </mat-slide-toggle>
+        </section>
+        <section class="slider">
+          <mat-slide-toggle [checked]="chambre().terrasse ?? false" (change)="update('terrasse', $event.checked)">
+            <span class="label-with-icon"><mat-icon>deck</mat-icon>Terrasse</span>
+          </mat-slide-toggle>
+        </section>
+        <section class="slider">
+          <mat-slide-toggle [checked]="chambre().balcon ?? false" (change)="update('balcon', $event.checked)">
+            <span class="label-with-icon"><mat-icon>balcony</mat-icon>Balcon</span>
+          </mat-slide-toggle>
+        </section>
+      }
+      @case ('description') {
+        <app-description-form
+          [description]="chambre().description"
+          (descriptionChange)="update('description', $event)"
+        ></app-description-form>
+      }
+      @case ('beds') {
+        <app-lit-table
+          [lits]="chambre().lits ?? []"
+          (litsChange)="update('lits', $event)"
+        ></app-lit-table>
+      }
+      @case ('bath') {
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>WC</mat-label>
+          <input
+            #wc
+            matInput
+            type="number"
+            [value]="chambre().wc ?? ''"
+            (input)="update('wc', wc.valueAsNumber)"
+          />
+          <mat-icon matPrefix>wc</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Salle de bain</mat-label>
+          <input
+            #salleDeBain
+            matInput
+            type="number"
+            [value]="chambre().salleDeBain ?? ''"
+            (input)="update('salleDeBain', salleDeBain.valueAsNumber)"
+          />
+          <mat-icon matPrefix>bathroom</mat-icon>
+        </mat-form-field>
+        <section class="aligned">
+          <mat-checkbox
+            [checked]="chambre().baignoire"
+            (change)="update('baignoire', $event.checked)"
+          >
+            <span class="label-with-icon">
+            <mat-icon>bathtub</mat-icon>
+            Baignoire
+              </span>
+          </mat-checkbox>
+          <mat-checkbox
+            [checked]="chambre().douche"
+            (change)="update('douche', $event.checked)"
+          >
+            <span class="label-with-icon">
+            <mat-icon>shower</mat-icon>
+            Douche
+            </span>
+          </mat-checkbox>
+        </section>
+      }
+      @case ('vues') {
+        <app-fren-table
+          [frens]="chambre().vues ?? []"
+          (frensChange)="update('vues', $event)"
+        ></app-fren-table>
+      }
+      @case ('gallery') {
+        @if (numero() < 0) {
+          <mat-card appearance="outlined">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>hide_image</mat-icon>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              La gallerie n'est pas disponible tant que l'élément n'est pas sauvegardé
+            </mat-card-content>
+          </mat-card>
+        } @else {
+          <app-storage-status [refreshKey]="storageRefreshKey()"></app-storage-status>
+          <app-gallery
+            [photos]="chambre().photos"
+            (uploadRequested)="uploadPhotos($event)"
+            (deletePhotos)="deletePhotos($event)"
+          ></app-gallery>
+        }
+      }
+      @case ('pets') {
+        <mat-slide-toggle
+          [checked]="chambre().animauxAutorises ?? false"
+          (change)="update('animauxAutorises', $event.checked)"
+        >
+          <span class="label-with-icon"><mat-icon>pets</mat-icon>Animaux autorisés</span>
+        </mat-slide-toggle>
+        <p></p>
+        <app-condition-table
+          [conditions]="chambre().animaux ?? []"
+          (conditionsChange)="update('animaux', $event)"
+        ></app-condition-table>
+      }
+      @case ('paid-services') {
+        <app-prestation-payante-table
+          [prestations]="chambre().prestationsPayantes ?? []"
+          (prestationsChange)="update('prestationsPayantes', $event)"
+        ></app-prestation-payante-table>
+      }
+      @case ('tarifs') {
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Coût</mat-label>
+          <input
+            #cout
+            matInput
+            type="number"
+            [value]="chambre().cout"
+            (input)="update('cout', cout.valueAsNumber)"
+            class="right-align"
+          />
+          <span matTextSuffix>&nbsp;€</span>
+        </mat-form-field>
+        <div class="separation line"></div>
+        <h3 class="aligned">
+          <mat-icon>person_add</mat-icon>
+          Personnes supplementaires
+        </h3>
+        <app-condition-table
+          [conditions]="chambre().plusPersonne ?? []"
+          (conditionsChange)="update('plusPersonne', $event)"
+        ></app-condition-table>
+        <div class="separation line"></div>
+        <h3 class="aligned">
+          <mat-icon>night_sight_max</mat-icon>
+          Nuits supplementaires
+        </h3>
+        <div class="separation"></div>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>A partir de ... nuit{{ (chambre().plusNuitMinimum ?? 0) > 1 ? 's' : '' }}</mat-label>
+          <input
+            #plusNuitMinimum
+            matInput
+            type="number"
+            [value]="chambre().plusNuitMinimum"
+            (input)="update('plusNuitMinimum', plusNuitMinimum.valueAsNumber)"
+          />
+          <mat-icon matPrefix>bedtime</mat-icon>
+        </mat-form-field>
+        <app-prestation-payante-table
+          [prestations]="chambre().plusNuit ?? []"
+          (prestationsChange)="update('plusNuit', $event)"
+        >
+        </app-prestation-payante-table>
+      }
+    }
+  </section>
+</div>

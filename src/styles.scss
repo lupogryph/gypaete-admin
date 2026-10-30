@@ -1,4 +1,3 @@
-
 // Include theming for Angular Material with `mat.theme()`.
 // This Sass mixin will define CSS variables that are used for styling Angular Material
 // components according to the Material 3 design spec.
@@ -43,34 +42,41 @@ body {
 
 /* You can add global styles to this file, and also import other style files */
 
-section {
-  padding: 0 1rem;
-  margin-bottom: 1rem;
+.dash-section {
+  margin-bottom: 2rem;
+
   &:first-child {
     padding-top: 1rem;
   }
+
   &.row {
     display: flex;
     gap: 1rem;
     flex-direction: row;
     flex-wrap: wrap;
   }
+
   &.lg, &.md, &.sm {
     margin-left: auto;
     margin-right: auto;
   }
+
   &.left {
     margin-left: 0;
   }
+
   &.right {
     margin-right: 0;
   }
+
   &.lg {
     max-width: 1920px;
   }
+
   &.md {
     max-width: 1300px;
   }
+
   &.sm {
     max-width: 720px;
   }
@@ -78,12 +84,15 @@ section {
 
 .status-icon {
   margin-right: 5px;
+
   &.dbx {
     color: deepskyblue;
   }
+
   &.ope {
     color: orange;
   }
+
   &.admin {
     color: red;
   }
@@ -144,6 +153,7 @@ section {
   padding: 16px 24px;
 }
 
+.no-scroll
 .dash-navigation,
 .dash-content {
   min-height: 0;
@@ -168,6 +178,18 @@ section {
   }
 }
 
+.aligned {
+  display: flex;
+  gap: 2rem;
+  gap: 2rem;
+}
+
+.label-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .table {
   width: 100%;
 
@@ -182,8 +204,16 @@ section {
     justify-content: flex-end;
   }
 
+  .mat-column-cout,
+  .mat-column-par,
+  .mat-column-parPersonne
+  {
+    width: 120px;
+  }
+
   .mat-column-actions {
     text-align: end;
+    width: 50px;
   }
 
   .fields {
@@ -242,10 +272,23 @@ input.right-align::-webkit-inner-spin-button {
 }
 
 .mat-mdc-snack-bar-container {
-  &.red-snackbar {
-    --mdc-snackbar-container-color: #941818;
-    --mat-snack-bar-button-color: #fff;
-    // --mat-mdc-snack-bar-container: #fff;
-    --mdc-snackbar-supporting-text-color: #fff;
+  .mat-mdc-snack-bar-label {
+    white-space: pre-line;
   }
+}
+
+.red-snackbar {
+  @include mat.snack-bar-overrides((
+    supporting-text-color: white,
+    button-color: white,
+    container-color: #5c0101,
+  ));
+}
+
+.green-snackbar {
+  @include mat.snack-bar-overrides((
+    supporting-text-color: white,
+    button-color: white,
+    container-color: #015c21,
+  ));
 }

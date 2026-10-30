@@ -1,11 +1,10 @@
-import {Component, effect, model, untracked, ViewChild} from '@angular/core';
-import {FormArray, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {Component, effect, inject, model, untracked, ViewChild} from '@angular/core';
+import {FormArray, ReactiveFormsModule} from '@angular/forms';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatTable, MatTableModule} from '@angular/material/table';
 import {FrEn} from '../../../../openapi';
-import {TranslationService} from '../../../../core/translation/translation.service';
 import {createFrEnForm, FrEnForm} from '../utils/fren-control';
 import {FrenFormService} from '../utils/fren-form-service';
 
@@ -25,6 +24,8 @@ import {FrenFormService} from '../utils/fren-form-service';
   templateUrl: './fren-table.html',
 })
 export class FrenTable {
+  private readonly frenFormService = inject(FrenFormService);
+
   readonly frens = model<FrEn[]>([]);
 
   @ViewChild(MatTable) private table?: MatTable<FrEnForm>;
@@ -32,7 +33,7 @@ export class FrenTable {
   readonly displayedColumns = ['fren', 'actions'];
   readonly frensArray = new FormArray<FrEnForm>([]);
 
-  constructor(private readonly frenFormService: FrenFormService) {
+  constructor() {
     effect(() => {
       const frens = this.frens();
       untracked(() => {

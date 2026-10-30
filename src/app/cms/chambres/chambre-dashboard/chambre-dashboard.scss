@@ -1,0 +1,27 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.field {
+  display: flex;
+  width: 100%;
+  max-width: 480px;
+}
+
+.separation {
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  &.line {
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
+}
+
+section.slider {
+  align-content: center;
+  height: 50px;
+}
