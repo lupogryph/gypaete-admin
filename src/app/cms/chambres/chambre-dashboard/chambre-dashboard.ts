@@ -148,6 +148,10 @@ export class ChambreDashboard {
     updateField(this.chambre, field, value);
   }
 
+  updateLits(lits: ChambreDto['lits']): void {
+    this.chambre.update((chambre) => ({...chambre, lits}));
+  }
+
   // gallery
 
   addPhoto(url: string): Observable<unknown> {

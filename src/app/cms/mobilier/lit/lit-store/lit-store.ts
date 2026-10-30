@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, inject, model, signal} from '@angular/core';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatDialog} from '@angular/material/dialog';
 import {MatIcon} from '@angular/material/icon';
@@ -34,7 +34,7 @@ export class LitStore {
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(Snackbar);
 
-  readonly lits = signal<LitDto[]>([]);
+  readonly lits = model<LitDto[]>([]);
   readonly pendingDeleteId = signal<number | null>(null);
   readonly deletingLitId = signal<number | null>(null);
 
