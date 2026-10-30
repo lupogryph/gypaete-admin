@@ -1,4 +1,12 @@
+.lit-list-item {
+  position: relative;
+}
+
 .lit-actions {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: 16px;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
   gap: 0.25rem;

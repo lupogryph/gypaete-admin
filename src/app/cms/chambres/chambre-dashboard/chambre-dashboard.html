@@ -85,9 +85,8 @@
       }
       @case ('beds') {
         <app-lit-table
-          [lits]="chambre().lits"
-          [chambreNumero]="chambre().numero"
-          (litsChange)="updateLits($event)"
+          [lits]="chambre().lits ?? []"
+          (litsChange)="update('lits', $event)"
         ></app-lit-table>
       }
       @case ('bath') {

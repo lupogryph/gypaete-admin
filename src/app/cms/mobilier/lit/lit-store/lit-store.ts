@@ -3,6 +3,7 @@ import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatDialog} from '@angular/material/dialog';
 import {MatIcon} from '@angular/material/icon';
 import {
+  MatDivider,
   MatList,
   MatListItem, MatListItemIcon,
   MatListItemLine,
@@ -24,6 +25,7 @@ import {LitForm} from '../lit-form/lit-form';
     MatListItemMeta,
     MatListItemTitle,
     MatListItemIcon,
+    MatDivider,
   ],
   selector: 'app-lit-store',
   styleUrl: './lit-store.scss',

@@ -1,5 +1,5 @@
 <div class="lit-layout">
-  <table mat-table [dataSource]="formArray.controls" class="table">
+  <table mat-table [dataSource]="formArray.controls" class="table no-scroll">
   <ng-container matColumnDef="lit">
     <th mat-header-cell *matHeaderCellDef>Lit</th>
     <td mat-cell *matCellDef="let row" [formGroup]="row">
@@ -9,7 +9,7 @@
           formControlName="litId"
           (selectionChange)="selectLit(row, $event.value)"
         >
-          @for (lit of availableLits(); track lit.id) {
+          @for (lit of availableLitsFor(row); track lit.id) {
             <mat-option [value]="lit.id">{{ lit.classe }} ({{ lit.largeur }} cm)</mat-option>
           }
         </mat-select>
@@ -43,7 +43,12 @@
 
   <ng-container matColumnDef="add">
     <td mat-footer-cell *matFooterCellDef [attr.colspan]="columns.length">
-      <button mat-stroked-button type="button" (click)="add()">
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="add()"
+        [disabled]="availableLits().length <= formArray.controls.length"
+      >
         <mat-icon>add</mat-icon>
         Ajouter un lit
       </button>
@@ -54,7 +59,7 @@
   <tr mat-row *matRowDef="let row; columns: columns"></tr>
   <tr mat-footer-row *matFooterRowDef="['add']"></tr>
   </table>
-  <aside class="lit-store">
+  <aside class="lit-store no-scroll">
     <app-lit-store [(lits)]="availableLits"></app-lit-store>
   </aside>
 </div>

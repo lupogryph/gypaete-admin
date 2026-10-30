@@ -113,7 +113,7 @@ export class ChambreDashboard {
       return;
     }
 
-    const {numero, photos, lits, ...dto} = this.chambre();
+    const {numero, photos, ...dto} = this.chambre();
     this.saving = true;
     const request = numero < 0
       ? this.chambreService.chambresControllerCreate(dto)
@@ -146,10 +146,6 @@ export class ChambreDashboard {
       return;
     }
     updateField(this.chambre, field, value);
-  }
-
-  updateLits(lits: ChambreDto['lits']): void {
-    this.chambre.update((chambre) => ({...chambre, lits}));
   }
 
   // gallery

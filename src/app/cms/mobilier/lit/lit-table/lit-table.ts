@@ -70,14 +70,32 @@ export class LitTable {
 
   selectLit(row: LitChambreForm, litId: number): void {
     const lit = this.availableLits().find((item) => item.id === litId) ?? null;
+    row.controls.litId.setValue(litId);
     row.controls.lit.setValue(lit);
     this.lits.set(this.formValue());
   }
 
+  availableLitsFor(row: LitChambreForm): LitDto[] {
+    const selectedByOtherRows = new Set(
+      this.formArray.controls
+        .filter((otherRow) => otherRow !== row)
+        .map((otherRow) => otherRow.controls.litId.value)
+        .filter((id): id is number => id !== null),
+    );
+
+    return this.availableLits().filter((lit) =>
+      lit.id === row.controls.litId.value || !selectedByOtherRows.has(lit.id),
+    );
+  }
+
   private createLitForm(dto?: LitChambreDto): LitChambreForm {
+    const lit = dto?.lit ?? this.availableLits().find((availableLit) =>
+      !this.formArray.controls.some((row) => row.controls.litId.value === availableLit.id),
+    ) ?? null;
+
     return new FormGroup({
-      litId: new FormControl(dto?.litId ?? null),
-      lit: new FormControl<LitDto | null>(dto?.lit ?? null),
+      litId: new FormControl(dto?.litId ?? lit?.id ?? null),
+      lit: new FormControl<LitDto | null>(lit),
       nombre: new FormControl(dto?.nombre ?? 1, {nonNullable: true}),
     });
   }
@@ -90,8 +108,9 @@ export class LitTable {
 
   private formValue(): LitChambreDto[] {
     return this.formArray.controls.flatMap((row) => {
-      const lit = row.controls.lit.value;
-      if (!lit || row.controls.litId.value !== lit.id) {
+      const litId = row.controls.litId.value;
+      const lit = this.availableLits().find((item) => item.id === litId) ?? row.controls.lit.value;
+      if (!lit || litId !== lit.id) {
         return [];
       }
 
