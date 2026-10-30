@@ -1,21 +1,28 @@
-<form [formRoot]="litForm">
-  <mat-form-field appearance="outline">
-    <mat-label>Classe</mat-label>
-    <input matInput [formField]="litForm.classe">
-  </mat-form-field>
+<h2 mat-dialog-title>{{ lit ? 'Modifier le lit' : 'Ajouter un lit' }}</h2>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Largeur</mat-label>
-    <input matInput type="number" [formField]="litForm.largeur">
-  </mat-form-field>
+<mat-dialog-content>
+  <form [formRoot]="litForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Classe</mat-label>
+      <input matInput [formField]="litForm.classe">
+    </mat-form-field>
 
-  <button
-    mat-stroked-button
-    color="primary"
-    type="submit"
-    [disabled]="!litForm().valid()"
-  >
-    <mat-icon>done</mat-icon>
-    Sauvegarder
-  </button>
-</form>
+    <mat-form-field appearance="outline">
+      <mat-label>Largeur</mat-label>
+      <input matInput type="number" [formField]="litForm.largeur">
+    </mat-form-field>
+
+    <mat-dialog-actions align="end">
+      <button mat-button type="button" mat-dialog-close>Annuler</button>
+      <button
+        mat-stroked-button
+        color="primary"
+        type="submit"
+        [disabled]="!litForm().valid()"
+      >
+        <mat-icon>done</mat-icon>
+        Sauvegarder
+      </button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

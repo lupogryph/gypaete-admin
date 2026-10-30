@@ -1,8 +1,16 @@
-import {Component, effect, inject, input, signal, untracked} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {form, FormField, FormRoot, required} from '@angular/forms/signals';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import {Snackbar} from '../../../../core/snackbar/snackbar';
 import {CreateLitDto, LitDto, LitService} from '../../../../openapi';
 
@@ -15,6 +23,10 @@ import {CreateLitDto, LitDto, LitService} from '../../../../openapi';
     MatInput,
     MatLabel,
     FormRoot,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogTitle,
   ],
   selector: 'app-lit-form',
   styleUrl: './lit-form.scss',
@@ -23,12 +35,13 @@ import {CreateLitDto, LitDto, LitService} from '../../../../openapi';
 export class LitForm {
   private readonly litService = inject(LitService);
   private readonly snackBar = inject(Snackbar);
+  private readonly dialogRef = inject(MatDialogRef<LitForm, LitDto>);
 
-  readonly lit = input<LitDto>();
+  readonly lit = inject<LitDto | undefined>(MAT_DIALOG_DATA, {optional: true});
 
   readonly litModel = signal<CreateLitDto>({
-    classe: '',
-    largeur: 0,
+    classe: this.lit?.classe ?? '',
+    largeur: this.lit?.largeur ?? 0,
   });
 
   readonly litForm = form(
@@ -40,29 +53,19 @@ export class LitForm {
     {
       submission: {
         action: async (field) => {
-          const id = this.lit()?.id;
+          const id = this.lit?.id;
           const dto = field().value();
           const request = id === undefined
             ? this.litService.litControllerCreate(dto)
             : this.litService.litControllerUpdate(id.toString(), dto);
           request.subscribe({
-            next: () => this.snackBar.success(id === undefined ? 'Lit ajouté' : 'Lit modifié'),
+            next: (savedLit) => {
+              this.snackBar.success(id === undefined ? 'Lit ajouté' : 'Lit modifié');
+              this.dialogRef.close(savedLit);
+            },
             error: (error) => this.snackBar.error(error),
           });
         }
       }
     });
-
-  constructor() {
-    effect(() => {
-      const lit = this.lit();
-      untracked(() => {
-        this.litModel.set({
-          classe: lit?.classe ?? '',
-          largeur: lit?.largeur ?? 0,
-        });
-      });
-    });
-  }
-
 }

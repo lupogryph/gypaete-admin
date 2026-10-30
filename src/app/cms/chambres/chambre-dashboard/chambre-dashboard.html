@@ -83,6 +83,11 @@
           (descriptionChange)="update('description', $event)"
         ></app-description-form>
       }
+      @case ('beds') {
+        <app-lit-table
+          [lits]="chambre().lits"
+        ></app-lit-table>
+      }
       @case ('bath') {
         <mat-form-field appearance="outline" class="field">
           <mat-label>WC</mat-label>
