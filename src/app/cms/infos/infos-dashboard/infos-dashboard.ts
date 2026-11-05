@@ -23,6 +23,7 @@ type InfoForm = FormGroup<{
   phoneNumbers: FormArray<FormControl<string>>;
   email: FormControl<string>;
   socialNetworks: FormRecord<FormControl<string>>;
+  reservationLinks: FormArray<FormControl<string>>;
 }>;
 
 const phoneNumberValidator: ValidatorFn = (control): ValidationErrors | null => {
@@ -80,6 +81,7 @@ export class InfosDashboard {
   readonly sections = [
     {id: 'contact', label: 'Coordonnées', icon: 'contact_mail'},
     {id: 'social', label: 'Réseaux sociaux', icon: 'share'},
+    {id: 'reservations', label: 'Liens de réservation', icon: 'link'},
   ] as const;
   activeSection: (typeof this.sections)[number]['id'] = 'contact';
 
@@ -91,6 +93,7 @@ export class InfosDashboard {
       validators: [Validators.required, Validators.email],
     }),
     socialNetworks: new FormRecord<FormControl<string>>({}),
+    reservationLinks: new FormArray<FormControl<string>>([]),
   });
 
   get phoneNumbers(): FormArray<FormControl<string>> {
@@ -99,6 +102,10 @@ export class InfosDashboard {
 
   get socialNetworkEntries(): [string, FormControl<string>][] {
     return Object.entries(this.form.controls.socialNetworks.controls);
+  }
+
+  get reservationLinks(): FormArray<FormControl<string>> {
+    return this.form.controls.reservationLinks;
   }
 
   ngOnInit(): void {
@@ -142,6 +149,14 @@ export class InfosDashboard {
 
   removeSocialNetwork(name: string): void {
     this.form.controls.socialNetworks.removeControl(name);
+  }
+
+  addReservationLink(): void {
+    this.reservationLinks.push(new FormControl('', {nonNullable: true}));
+  }
+
+  removeReservationLink(index: number): void {
+    this.reservationLinks.removeAt(index);
   }
 
   detectSocialNetwork(name: string): void {
@@ -209,6 +224,7 @@ export class InfosDashboard {
           .map(([name, url]) => [name, url.trim()])
           .filter(([, url]) => url),
       ),
+      reservationLinks: value.reservationLinks.map((url) => url.trim()).filter(Boolean),
     };
 
     this.saving.set(true);
@@ -241,6 +257,11 @@ export class InfosDashboard {
     }
     for (const [name, url] of Object.entries(info.socialNetworks)) {
       socialNetworks.addControl(name, new FormControl(url, {nonNullable: true}), {emitEvent: false});
+    }
+
+    this.reservationLinks.clear({emitEvent: false});
+    for (const url of info.reservationLinks) {
+      this.reservationLinks.push(new FormControl(url, {nonNullable: true}), {emitEvent: false});
     }
 
     this.form.markAsPristine();
