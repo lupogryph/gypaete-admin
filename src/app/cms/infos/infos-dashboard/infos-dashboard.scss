@@ -1,0 +1,44 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.dash-layout {
+  max-width: 1000px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.dynamic-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+
+  mat-form-field {
+    flex: 1;
+  }
+
+  > button {
+    margin-top: 4px;
+  }
+}
+
+@media (max-width: 600px) {
+  .dash-layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .dash-navigation {
+    border-right: 0;
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
+
+  .dash-content {
+    padding: 12px 16px;
+  }
+}

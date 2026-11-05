@@ -1,0 +1,120 @@
+<mat-toolbar class="toolbar">
+  <span class="title">Informations</span>
+  <button
+    matButton="outlined"
+    type="button"
+    [disabled]="!info() || form.invalid || saving()"
+    (click)="save()"
+  >
+    <mat-icon>save</mat-icon>
+    {{ saving() ? 'Enregistrement…' : 'Sauvegarder' }}
+  </button>
+</mat-toolbar>
+
+@if (loading()) {
+  <p class="status" role="status">Chargement des informations…</p>
+} @else if (info()) {
+  <form [formGroup]="form" class="dash-layout" (ngSubmit)="save()">
+    <mat-list class="dash-navigation no-scroll" aria-label="Sections des informations">
+      @for (section of sections; track section.id) {
+        <mat-list-item
+          matRipple
+          [class.selected]="activeSection === section.id"
+          [attr.aria-current]="activeSection === section.id ? 'page' : null"
+          (click)="activeSection = section.id"
+        >
+          <mat-icon matListItemIcon fontSet="material-symbols-outlined">{{ section.icon }}</mat-icon>
+          <div matListItemTitle>{{ section.label }}</div>
+        </mat-list-item>
+      }
+    </mat-list>
+
+    <section class="dash-content no-scroll">
+      @switch (activeSection) {
+        @case ('contact') {
+          <mat-form-field appearance="outline">
+            <mat-icon matPrefix>home_pin</mat-icon>
+            <mat-label>Adresse postale</mat-label>
+            <textarea matInput rows="4" formControlName="postal"></textarea>
+          </mat-form-field>
+
+          <div class="separation line"></div>
+
+          <div formArrayName="phoneNumbers" class="dynamic-list">
+            @for (phone of phoneNumbers.controls; track phone; let i = $index) {
+              <div class="dynamic-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Téléphone {{ i + 1 }}</mat-label>
+                  <input matInput type="tel" [formControlName]="i" autocomplete="tel">
+                  <mat-icon matIconPrefix>phone</mat-icon>
+                  @if (phone.hasError('required') && phone.touched) {
+                    <mat-error>Le numéro est requis.</mat-error>
+                  } @else if (phone.hasError('phoneNumber') && phone.touched) {
+                    <mat-error>Saisissez un numéro valide (7 à 15 chiffres).</mat-error>
+                  }
+                </mat-form-field>
+                <button
+                  mat-icon-button
+                  type="button"
+                  [attr.aria-label]="'Supprimer le téléphone ' + (i + 1)"
+                  (click)="removePhoneNumber(i)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            }
+          </div>
+          <button mat-stroked-button type="button" (click)="addPhoneNumber()">
+            <mat-icon>add</mat-icon>
+            Ajouter un téléphone
+          </button>
+
+          <div class="separation line"></div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Adresse e-mail</mat-label>
+            <mat-icon matPrefix>email</mat-icon>
+            <input matInput type="email" formControlName="email" autocomplete="email">
+            @if (form.controls.email.hasError('required') && form.controls.email.touched) {
+              <mat-error>L’adresse e-mail est requise.</mat-error>
+            } @else if (form.controls.email.hasError('email') && form.controls.email.touched) {
+              <mat-error>Saisissez une adresse e-mail valide.</mat-error>
+            }
+          </mat-form-field>
+        }
+        @case ('social') {
+          <p>Le réseau est détecté automatiquement à partir de l’URL saisie.</p>
+          <div [formGroup]="form.controls.socialNetworks" class="dynamic-list">
+            @for (entry of socialNetworkEntries; track entry[0]) {
+              <div class="dynamic-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ socialNetworkLabel(entry[0]) }}</mat-label>
+                  <input
+                    matInput
+                    type="url"
+                    [formControlName]="entry[0]"
+                    (blur)="detectSocialNetwork(entry[0])"
+                  >
+                </mat-form-field>
+                <button
+                  matIconButton
+                  type="button"
+                  [attr.aria-label]="'Supprimer ' + socialNetworkLabel(entry[0])"
+                  (click)="removeSocialNetwork(entry[0])"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            }
+          </div>
+          <button mat-stroked-button type="button" (click)="addSocialNetwork()">
+            <mat-icon>add</mat-icon>
+            Ajouter un réseau social
+          </button>
+        }
+      }
+    </section>
+  </form>
+} @else {
+  <p class="status" role="status">Aucune information de contact disponible.</p>
+}
