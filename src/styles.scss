@@ -44,7 +44,10 @@ body {
 
 .dash-section {
   margin-bottom: 2rem;
+}
 
+.dash-content,
+.dash-section {
   &:first-child {
     padding-top: 1rem;
   }
@@ -117,6 +120,16 @@ body {
   min-height: 0;
 }
 
+.separation {
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  &.line {
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
+}
+
 .toolbar {
   gap: 16px;
   flex: 0 0 auto;
@@ -153,7 +166,7 @@ body {
   padding: 16px 24px;
 }
 
-.no-scroll
+.no-scroll,
 .dash-navigation,
 .dash-content {
   min-height: 0;
@@ -180,7 +193,6 @@ body {
 
 .aligned {
   display: flex;
-  gap: 2rem;
   gap: 2rem;
 }
 
