@@ -112,6 +112,30 @@
             Ajouter un réseau social
           </button>
         }
+        @case ('reservations') {
+          <div formArrayName="reservationLinks" class="dynamic-list">
+            @for (link of reservationLinks.controls; track link; let i = $index) {
+              <div class="dynamic-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Lien de réservation {{ i + 1 }}</mat-label>
+                  <input matInput type="url" [formControlName]="i">
+                </mat-form-field>
+                <button
+                  matIconButton
+                  type="button"
+                  [attr.aria-label]="'Supprimer le lien de réservation ' + (i + 1)"
+                  (click)="removeReservationLink(i)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            }
+          </div>
+          <button mat-stroked-button type="button" (click)="addReservationLink()">
+            <mat-icon>add</mat-icon>
+            Ajouter un lien de réservation
+          </button>
+        }
       }
     </section>
   </form>
