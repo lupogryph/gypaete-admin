@@ -109,9 +109,8 @@ export class InfosDashboard {
   }
 
   ngOnInit(): void {
-    this.infosService.infosControllerFindAll().subscribe({
-      next: (infos) => {
-        const info = infos[0];
+    this.infosService.infosControllerFind().subscribe({
+      next: (info) => {
         if (!info) {
           this.snackBar.error('Aucune information de contact n’a été trouvée.');
           this.loading.set(false);
@@ -228,7 +227,7 @@ export class InfosDashboard {
     };
 
     this.saving.set(true);
-    this.infosService.infosControllerUpdate(info.id, update).subscribe({
+    this.infosService.infosControllerUpdate(update).subscribe({
       next: (updatedInfo) => {
         this.setInfo(updatedInfo);
         this.snackBar.success('Sauvegardé');
