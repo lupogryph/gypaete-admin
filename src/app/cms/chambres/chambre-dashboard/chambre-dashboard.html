@@ -31,22 +31,22 @@
         <mat-form-field appearance="outline" class="field">
           <mat-label>Nombre de personnes</mat-label>
           <input
-            #mombrePersonnes
+            #nombrePersonnes
             matInput
             type="number"
-            [value]="chambre().mombrePersonnes ?? ''"
-            (input)="update('mombrePersonnes', mombrePersonnes.valueAsNumber)"
+            [value]="chambre().nombrePersonnes ?? ''"
+            (input)="update('nombrePersonnes', nombrePersonnes.valueAsNumber)"
           />
           <mat-icon matPrefix>group</mat-icon>
         </mat-form-field>
         <mat-form-field appearance="outline" class="field">
           <mat-label>Nombre de personnes max</mat-label>
           <input
-            #mombrePersonnesMax
+            #nombrePersonnesMax
             matInput
             type="number"
-            [value]="chambre().mombrePersonnesMax ?? ''"
-            (input)="update('mombrePersonnesMax', mombrePersonnesMax.valueAsNumber)"
+            [value]="chambre().nombrePersonnesMax ?? ''"
+            (input)="update('nombrePersonnesMax', nombrePersonnesMax.valueAsNumber)"
           />
           <mat-icon matPrefix>group</mat-icon>
         </mat-form-field>

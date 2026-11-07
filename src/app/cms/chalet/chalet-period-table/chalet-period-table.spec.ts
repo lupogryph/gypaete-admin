@@ -23,6 +23,7 @@ describe('ChaletPeriodTable', () => {
 
   it('preserves date-only values when syncing datepicker dates with the DTO', async () => {
     const periods: PeriodeDto[] = [{
+      id: 1,
       dateDebut: '2025-01-02',
       dateFin: '2025-01-04',
       cout: 10,

@@ -22,6 +22,7 @@ import {MatSelect} from '@angular/material/select';
 import {PeriodeDto, Temporalite} from '../../../openapi';
 
 interface PeriodeControls {
+  id: FormControl<number>;
   debut: FormControl<Date | null>;
   fin: FormControl<Date | null>;
   cout: FormControl<number>;
@@ -111,6 +112,7 @@ export class ChaletPeriodTable {
 
   private createForm(dto?: PeriodeDto): PeriodeForm {
     return new FormGroup({
+      id: new FormControl(dto?.id ?? 0, {nonNullable: true}),
       debut: new FormControl<Date | null>(dto ? this.parseDate(dto.dateDebut) : null, {
         validators: [Validators.required],
       }),
@@ -124,9 +126,10 @@ export class ChaletPeriodTable {
 
   private formValue(): PeriodeDto[] {
     return this.formArray.getRawValue()
-      .flatMap(({debut, fin, cout, par}) =>
+      .flatMap(({id, debut, fin, cout, par}) =>
         debut && fin
           ? [{
+            id,
             dateDebut: this.formatDate(debut),
             dateFin: this.formatDate(fin),
             cout,
@@ -166,6 +169,7 @@ export class ChaletPeriodTable {
       left.every((dto, index) => {
         const other = right[index];
         return (
+          dto.id === other.id &&
           dto.dateDebut === other.dateDebut &&
           dto.dateFin === other.dateFin &&
           dto.cout === other.cout &&
